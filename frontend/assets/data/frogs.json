@@ -1,0 +1,277 @@
+[
+  {
+    "name": "Booroolong Frog",
+    "description": "Medium-sized frog found along rocky permanent streams in NSW and Victoria",
+    "image_filename": "booroolong_frog.png"
+  },
+  {
+    "name": "Cave Frog",
+    "description": "Small frog that inhabits caves and rocky outcrops in Queensland",
+    "image_filename": "cave_frog.png"
+  },
+  {
+    "name": "Common Eastern Froglet",
+    "description": "Tiny brown frog with variable patterns commonly found in eastern Australia",
+    "image_filename": "common_eastern_froglet.png"
+  },
+  {
+    "name": "Davies Tree Frog",
+    "description": "Green tree frog found in rainforests of northeast Queensland",
+    "image_filename": "davies_tree_frog.png"
+  },
+  {
+    "name": "Desert Spadefoot",
+    "description": "Burrowing frog adapted to arid environments with specialized digging feet",
+    "image_filename": "desert_spadefoot.png"
+  },
+  {
+    "name": "Eastern Banjo Frog",
+    "description": "Also known as Pobblebonk for its distinctive call similar to a banjo string being plucked",
+    "image_filename": "eastern_banjo_frog.png"
+  },
+  {
+    "name": "Eungella Day Frog",
+    "description": "Stream-dwelling frog found in the Eungella region of Queensland",
+    "image_filename": "eungella_day_frog.png"
+  },
+  {
+    "name": "Flat Headed Frog",
+    "description": "Distinctive frog with unusually flat head adapted for living in narrow crevices",
+    "image_filename": "flat_headed_frog.png"
+  },
+  {
+    "name": "Fleay's Barred Frog",
+    "description": "Large frog with distinctive barred pattern on its limbs",
+    "image_filename": "fleays_barred_frog.png"
+  },
+  {
+    "name": "Giant Barred Frog",
+    "description": "One of Australia's largest frogs with distinctive dark bars on limbs",
+    "image_filename": "giant_barred_frog.png"
+  },
+  {
+    "name": "Giant Burrowing Frog",
+    "description": "Large frog that spends most of its time in underground burrows",
+    "image_filename": "giant_burrowing_frog.png"
+  },
+  {
+    "name": "Green and Golden Bell Frog",
+    "description": "Bright green frog with gold patterns and distinctive gold iris",
+    "image_filename": "green_and_golden_bell_frog.png"
+  },
+  {
+    "name": "Green Tree Frog",
+    "description": "Large bright green frog often found around houses and water tanks",
+    "image_filename": "green_tree_frog.png"
+  },
+  {
+    "name": "Hosmer's Nursery Frog",
+    "description": "Small frog that cares for its eggs in moist leaf litter",
+    "image_filename": "hosmers_nursery_frog.png"
+  },
+  {
+    "name": "Howard Springs Toadlet",
+    "description": "Small ground-dwelling frog from the Northern Territory",
+    "image_filename": "howard_springs_toadlet.png"
+  },
+  {
+    "name": "Kroombit Tops Tinker Frog",
+    "description": "Endangered frog found only in Kroombit Tops National Park",
+    "image_filename": "kroombit_tops_tinker_frog.png"
+  },
+  {
+    "name": "Kuranda Tree Frog",
+    "description": "Vibrant green tree frog found in the Kuranda region of Queensland",
+    "image_filename": "kuranda_tree_frog.png"
+  },
+  {
+    "name": "Littlejohn's Toadlet",
+    "description": "Small secretive frog with warty skin and restricted distribution",
+    "image_filename": "littlejohns_toadlet.png"
+  },
+  {
+    "name": "Magnificent Brood Frog",
+    "description": "Frog that guards its eggs until they hatch into froglets",
+    "image_filename": "magnificent_brood_frog.png"
+  },
+  {
+    "name": "Magnificent Tree Frog",
+    "description": "Large green tree frog with prominent white spots",
+    "image_filename": "magnificent_tree_frog.png"
+  },
+  {
+    "name": "Mahony's Toadlet",
+    "description": "Recently discovered toadlet with distinctive marbled black and white belly",
+    "image_filename": "mahonys_toadlet.png"
+  },
+  {
+    "name": "Moss Froglet",
+    "description": "Tiny frog that lives among moss in alpine and subalpine areas",
+    "image_filename": "moss_froglet.png"
+  },
+  {
+    "name": "Motorbike Frog",
+    "description": "Named for its call which sounds like a motorbike changing gears",
+    "image_filename": "motorbike_frog.png"
+  },
+  {
+    "name": "Mount Top Nursery Frog",
+    "description": "Small frog that lives high in mountains of Far North Queensland",
+    "image_filename": "mount_top_nursery_frog.png"
+  },
+  {
+    "name": "Mountain Frog",
+    "description": "Frog adapted to high elevation habitats in eastern Australia",
+    "image_filename": "mountain_frog.png"
+  },
+  {
+    "name": "Mountain Mist Frog",
+    "description": "Frog that lives in misty mountain streams and waterfalls",
+    "image_filename": "mountain_mist_frog.png"
+  },
+  {
+    "name": "Mt Elliot Nursery Frog",
+    "description": "Small frog endemic to Mount Elliot in North Queensland",
+    "image_filename": "mt_elliot_nursery_frog.png"
+  },
+  {
+    "name": "Northern Corroboree Frog",
+    "description": "Small black and yellow striped frog endangered due to chytrid fungus",
+    "image_filename": "northern_corroboree_frog.png"
+  },
+  {
+    "name": "Northern Flinders Ranges Froglet",
+    "description": "Small frog endemic to the northern Flinders Ranges in South Australia",
+    "image_filename": "northern_flinders_ranges_froglet.png"
+  },
+  {
+    "name": "Northern Heath Frog",
+    "description": "Frog that inhabits heathland in northern Australia",
+    "image_filename": "northern_heath_frog.png"
+  },
+  {
+    "name": "Northern Snapping Frog",
+    "description": "Large frog that makes a loud snapping sound when calling",
+    "image_filename": "northern_snapping_frog.png"
+  },
+  {
+    "name": "Northern Tinker Frog",
+    "description": "Small frog with a call that sounds like a tinker working with metal",
+    "image_filename": "northern_tinker_frog.png"
+  },
+  {
+    "name": "Orange-bellied Froglet",
+    "description": "Small frog with distinctive orange coloration on its belly",
+    "image_filename": "orange_bellied_froglet.png"
+  },
+  {
+    "name": "Pobblebonk",
+    "description": "Round burrowing frog known for its \"bonk\" call like a banjo string",
+    "image_filename": "pobblebonk.png"
+  },
+  {
+    "name": "Rattling Nursery Frog",
+    "description": "Small frog with a call that sounds like rattling or clicking",
+    "image_filename": "rattling_nursery_frog.png"
+  },
+  {
+    "name": "Richmond Mountain Frog",
+    "description": "Rare frog found in the mountains of northeastern NSW",
+    "image_filename": "richmond_mountain_frog.png"
+  },
+  {
+    "name": "Sloane's Froglet",
+    "description": "Tiny frog with a short,  sharp call found in inland NSW",
+    "image_filename": "sloanes_froglet.png"
+  },
+  {
+    "name": "Southern Barred Frog",
+    "description": "Large frog with distinctive barred pattern on limbs",
+    "image_filename": "southern_barred_frog.png"
+  },
+  {
+    "name": "Southern Bell Frog",
+    "description": "Bright green frog with golden stripes and black spotting",
+    "image_filename": "southern_bell_frog.png"
+  },
+  {
+    "name": "Southern Corroboree Frog",
+    "description": "Critically endangered black and yellow striped frog",
+    "image_filename": "southern_corroboree_frog.png"
+  },
+  {
+    "name": "Southern Heath Frog",
+    "description": "Frog adapted to heathland environments in southern Australia",
+    "image_filename": "southern_heath_frog.png"
+  },
+  {
+    "name": "Spotted Tree Frog",
+    "description": "Tree frog with distinctive spotted pattern",
+    "image_filename": "spotted_tree_frog.png"
+  },
+  {
+    "name": "Striped Marsh Frog",
+    "description": "Common frog with distinctive stripes running down its back",
+    "image_filename": "striped_marsh_frog.png"
+  },
+  {
+    "name": "Sunset Frog",
+    "description": "Frog with unique reddish-brown coloration resembling a sunset",
+    "image_filename": "sunset_frog.png"
+  },
+  {
+    "name": "Tapping Nursery Frog",
+    "description": "Small frog with a tapping call that cares for its eggs",
+    "image_filename": "tapping_nursery_frog.png"
+  },
+  {
+    "name": "Tasmanian Tree Frog",
+    "description": "Tree frog endemic to Tasmania with variable coloration",
+    "image_filename": "tasmanian_tree_frog.png"
+  },
+  {
+    "name": "Tusked Frog",
+    "description": "Male has tusk-like projections used during breeding competition",
+    "image_filename": "tusked_frog.png"
+  },
+  {
+    "name": "Victorian Smooth Froglet",
+    "description": "Small smooth-skinned frog found in Victoria",
+    "image_filename": "victorian_smooth_froglet.png"
+  },
+  {
+    "name": "Wallum Sedge Frog",
+    "description": "Acid-tolerant frog that lives in wallum heath environments",
+    "image_filename": "wallum_sedge_frog.png"
+  },
+  {
+    "name": "White Bellied Frog",
+    "description": "Small frog with distinctive white belly found only in southwest WA",
+    "image_filename": "white_bellied_frog.png"
+  },
+  {
+    "name": "Yellow Spotted Bell Frog",
+    "description": "Large green frog with yellow spots thought extinct until rediscovered",
+    "image_filename": "yellow_spotted_bell_frog.png"
+  },
+  {
+    "name": "Australian Lace-Lid",
+    "description": "Frog with partially webbed eyelids that resemble lace",
+    "image_filename": "australian_lace_lid.png"
+  },
+  {
+    "name": "Baw Baw Frog",
+    "description": "Critically endangered frog found only on the Baw Baw Plateau in Victoria",
+    "image_filename": "baw_baw_frog.png"
+  },
+  {
+    "name": "Beautiful Nursery Frog",
+    "description": "Colorful small frog that provides parental care to its eggs",
+    "image_filename": "beautiful_nursery_frog.png"
+  },
+  {
+    "name": "Bellenden Ker Nursery Frog",
+    "description": "Small frog endemic to the Bellenden Ker Range in Queensland",
+    "image_filename": "bellenden_ker_nursery_frog.png"
+  }
+]
