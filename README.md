@@ -1,4 +1,4 @@
-# 🐸 project-pobblebonk | RMIT Capstone Project
+# 🐸 Frog Finder | RMIT Capstone Project
 Final year capstone project for multidisciplinary group of RMIT students.
 Application for automated classification of Australian frog species from environmental audio recordings, extending previous semesters capstone project.
 
