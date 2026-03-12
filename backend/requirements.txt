@@ -1,0 +1,21 @@
+# Install by using pip install -r Backend/requirements.txt
+
+# Use PyTorchs CUDA 
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+torch
+torchvision
+torchaudio
+
+# Audio processing
+librosa
+imageio-ffmpeg
+panns_inference
+static-ffmpeg
+
+# Web server
+flask
+Flask-CORS
+
+# Testing
+pytest
