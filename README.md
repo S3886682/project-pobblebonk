@@ -40,12 +40,17 @@ Application for automated classification of Australian frog species from environ
 ![Librosa](https://img.shields.io/badge/Librosa-1f77b4?style=flat&logoColor=white)
 ![Scikit--Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)
 
+---
 
-## 🏗️ Architecture
+## 🏛️ Architecture
 
 ![Architecture Diagram](documentation/images/framework-image.png)
 
 **All processing runs on-device** - No external dependencies (backend/database for population tracking)
+
+## 🏗️ Component Diagram
+
+![Architecture Diagram](documentation/images/project-architecture-image.png)
 
 ---
 
