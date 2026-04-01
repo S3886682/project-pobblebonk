@@ -5,11 +5,8 @@ Application for automated classification of Australian frog species from environ
 
 ---
 
-## Repository Structure
-
-```
-TBD
-```
+## Build and run
+See [SETUP.MD](documentation\SETUP.md) file for guide on installing and running.
 
 ---
 
