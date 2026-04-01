@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "name": "Pobblebonk",
+    "scientificName": "Limnodynastes dumerilii",
+    "description": "A distinctive frog known for its deep, popping call",
+    "regions": ["New South Wales", "Victoria"],
+    "conservationStatus": "Least Concern",
+    "habitat": "Marshes, swamps, and wet grasslands",
+    "size": "3-4 cm",
+    "callDescription": "Deep 'bonk' sound, like a wooden drum"
+  },
+  {
+    "id": 2,
+    "name": "Green Tree Frog",
+    "scientificName": "Litoria caerulea",
+    "description": "A bright green frog commonly kept as a pet",
+    "regions": ["Queensland", "New South Wales"],
+    "conservationStatus": "Least Concern",
+    "habitat": "Rainforests, woodlands, and gardens",
+    "size": "6-10 cm",
+    "callDescription": "Loud, repetitive 'kwack' or 'quack' call"
+  },
+  {
+    "id": 3,
+    "name": "Southern Bell Frog",
+    "scientificName": "Litoria raniformis",
+    "description": "A large green frog with a distinctive call",
+    "regions": ["New South Wales", "Victoria"],
+    "conservationStatus": "Vulnerable",
+    "habitat": "Swamps and wetlands with emergent vegetation",
+    "size": "4-6 cm",
+    "callDescription": "Loud, deep 'bonk-bonk' call"
+  }
+]
