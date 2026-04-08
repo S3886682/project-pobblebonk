@@ -1,5 +1,5 @@
 # ============================================================
-# config.py — Audio + model configuration
+# config.py  Audio + model configuration
 #
 # These parameters match the original training script.
 # The EXAMPLETRAININGSCRIPT.py shows the target config for
@@ -13,8 +13,8 @@
 
 # --- Audio processing ---
 SAMPLE_RATE = 32000    # SR
-WIN_SEC     = 0.3      # seconds per training window
-N_MFCC      = 100      # MFCC coefficients
+WIN_SEC     = 0.5      # seconds per training window (tuned: was 0.3)
+N_MFCC      = 20       # MFCC coefficients (tuned: was 100 — fewer generalise better)
 N_FFT       = 2048     # n_fft / window size
 HOP_LENGTH  = 512      # hop length
 
