@@ -1,0 +1,166 @@
+{
+  "timestamp": "2026-04-02T00:00:00",
+  "model": "Trained Models/svm_classifier_1.pkl",
+  "config": {
+    "sample_rate": 32000,
+    "n_mfcc": 100,
+    "n_fft": 2048,
+    "hop_length": 512,
+    "window_duration": 0.3,
+    "window_step": 0.2
+  },
+  "summary": {
+    "total": 21,
+    "correct": 8,
+    "accuracy": 0.381
+  },
+  "results": [
+    {
+      "file": "09 Green Tree Frog.mp3",
+      "truth": "Green Tree Frog",
+      "predicted": "Green Tree Frog",
+      "confidence": 0.077,
+      "correct": true
+    },
+    {
+      "file": "10 Northern Snapping Frog.mp3",
+      "truth": "Northern Snapping Frog",
+      "predicted": "Northern Snapping Frog",
+      "confidence": 0.135,
+      "correct": true
+    },
+    {
+      "file": "11 Rattling Nursery Frog.mp3",
+      "truth": "Rattling Nursery Frog",
+      "predicted": "Unknown",
+      "confidence": 0.0,
+      "correct": false
+    },
+    {
+      "file": "12 Flat-headed Frog.mp3",
+      "truth": "Flat-headed Frog",
+      "predicted": "Baw Baw Frog",
+      "confidence": 0.11,
+      "correct": false
+    },
+    {
+      "file": "13 Tusked Frog.mp3",
+      "truth": "Tusked Frog",
+      "predicted": "Baw Baw Frog",
+      "confidence": 0.182,
+      "correct": false
+    },
+    {
+      "file": "14 Sunset Frog.mp3",
+      "truth": "Sunset Frog",
+      "predicted": "Unknown",
+      "confidence": 0.0,
+      "correct": false
+    },
+    {
+      "file": "15 Davies' Tree Frog.mp3",
+      "truth": "Davies' Tree Frog",
+      "predicted": "Davies Tree Frog",
+      "confidence": 0.345,
+      "correct": false
+    },
+    {
+      "file": "16 Cave Frog.mp3",
+      "truth": "Cave Frog",
+      "predicted": "Cave Frog",
+      "confidence": 0.131,
+      "correct": true
+    },
+    {
+      "file": "17 Northern Flinders Ranges Froglet.mp3",
+      "truth": "Northern Flinders Ranges Froglet",
+      "predicted": "Howard Springs Toadlet",
+      "confidence": 0.166,
+      "correct": false
+    },
+    {
+      "file": "18 Moss Froglet.mp3",
+      "truth": "Moss Froglet",
+      "predicted": "Common Eastern Froglet",
+      "confidence": 0.053,
+      "correct": false
+    },
+    {
+      "file": "19 Wallum Sedge Frog.mp3",
+      "truth": "Wallum Sedge Frog",
+      "predicted": "Magnificent Brood Frog",
+      "confidence": 0.097,
+      "correct": false
+    },
+    {
+      "file": "20 Howard Springs Toadlet.mp3",
+      "truth": "Howard Springs Toadlet",
+      "predicted": "Howard Springs Toadlet",
+      "confidence": 0.545,
+      "correct": true
+    },
+    {
+      "file": "21 Green and Golden Bell Frog.mp3",
+      "truth": "Green and Golden Bell Frog",
+      "predicted": "Southern Bell Frog",
+      "confidence": 0.151,
+      "correct": false
+    },
+    {
+      "file": "22 Southern Barred Frog.mp3",
+      "truth": "Southern Barred Frog",
+      "predicted": "Southern Barred Frog",
+      "confidence": 0.196,
+      "correct": true
+    },
+    {
+      "file": "23 Magnificent Brood Frog.mp3",
+      "truth": "Magnificent Brood Frog",
+      "predicted": "Magnificent Brood Frog",
+      "confidence": 0.213,
+      "correct": true
+    },
+    {
+      "file": "24 Southern Bell Frog.mp3",
+      "truth": "Southern Bell Frog",
+      "predicted": "Southern Bell Frog",
+      "confidence": 0.318,
+      "correct": true
+    },
+    {
+      "file": "25 Australian Lace-Lid.mp3",
+      "truth": "Australian Lace-Lid",
+      "predicted": "Australian Lace-Lid",
+      "confidence": 0.191,
+      "correct": true
+    },
+    {
+      "file": "26 Orange-bellied Froglet.mp3",
+      "truth": "Orange-bellied Froglet",
+      "predicted": "Unknown",
+      "confidence": 0.0,
+      "correct": false
+    },
+    {
+      "file": "27 Tapping Nursery Frog.mp3",
+      "truth": "Tapping Nursery Frog",
+      "predicted": "Common Eastern Froglet",
+      "confidence": 0.089,
+      "correct": false
+    },
+    {
+      "file": "28 Giant Burrowing Frog copy.mp3",
+      "truth": "Giant Burrowing Frog copy",
+      "predicted": "Giant Burrowing Frog",
+      "confidence": 0.276,
+      "correct": false
+    },
+    {
+      "file": "Test1.mp3",
+      "truth": "Test1",
+      "predicted": "Giant Burrowing Frog",
+      "confidence": 0.276,
+      "correct": false
+    }
+  ]
+}
