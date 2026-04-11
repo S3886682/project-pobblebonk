@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { micRecorderService } from '../services/micRecorderService';
 
 export const useRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -7,11 +8,11 @@ export const useRecorder = () => {
   const startRecording = useCallback(async () => {
     try {
       setRecordingError(null);
-      // STUB: Simulating recording start
-      // TODO: Implement actual recording logic using expo Audio Recording @ micRecorderService
+      await micRecorderService.startRecording();
+      
       setIsRecording(true);
-      console.log('[STUB] Recording started');
     } catch (error) {
+      console.error('[useRecorder] startRecording failed:', error);
       setRecordingError(error.message);
     }
   }, []);
@@ -19,13 +20,12 @@ export const useRecorder = () => {
   const stopRecording = useCallback(async () => {
     try {
       setRecordingError(null);
-      // STUB: Simulating recording stop
-      // TODO: Implement actual recording stop logic and return audio file URI @ micRecorderService
+      const uri = await micRecorderService.stopRecording();
       setIsRecording(false);
-      const dummyAudioFile = 'dummy-audio-wav';
-      console.log('[STUB] Recording stopped, returning dummy audio');
-      return dummyAudioFile;
+      return uri;
     } catch (error) {
+
+      console.error('[useRecorder] stopRecording failed:', error);
       setRecordingError(error.message);
     }
   }, []);
