@@ -8,8 +8,7 @@ export const useRecorder = () => {
   const startRecording = useCallback(async () => {
     try {
       setRecordingError(null);
-      await micRecorderService.startRecording();
-      
+      await micRecorderService.startRecording(() => setIsRecording(false));
       setIsRecording(true);
     } catch (error) {
       console.error('[useRecorder] startRecording failed:', error);

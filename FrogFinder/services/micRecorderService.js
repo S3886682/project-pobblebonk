@@ -7,7 +7,7 @@ const MAX_RECORDING_DURATION_MS = 30000; // 30 seconds
 const COMMON_OPTIONS = {
   extension: '.m4a',
   sampleRate: 44100,
-  numberOfChannels: 1, // mono is sufficient for frog call detection
+  numberOfChannels: 1, 
   bitRate: 128000,
   isMeteringEnabled: false,
 };
@@ -28,7 +28,7 @@ const PLATFORM_OPTIONS = Platform.select({
   },
   default: {
     ...COMMON_OPTIONS,
-    mimeType: 'audio/webm', // browsers don't support M4A recording
+    mimeType: 'audio/webm', 
   },
 });
 
@@ -37,19 +37,34 @@ const PLATFORM_OPTIONS = Platform.select({
 class MicRecorderService {
   constructor() {
     this.recorder = null;
+    this._statusSubscription = null;
   }
 
-  async startRecording() {
+  // onAutoStop is called if the recorder hits MAX_RECORDING_DURATION_MS and stops itself.
+  async startRecording(onAutoStop) {
     const { granted } = await requestRecordingPermissionsAsync();
     if (!granted) {
       throw new Error('Microphone permission not granted');
     }
 
-    // iOS throws RecordingDisabledException, without this must be called before record().
+    // iOS throws RecordingDisabledException without this
     await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
 
     this.recorder = new AudioModule.AudioRecorder(PLATFORM_OPTIONS);
     await this.recorder.prepareToRecordAsync(PLATFORM_OPTIONS);
+
+    this._statusSubscription = this.recorder.addListener('recordingStatusUpdate', async (status) => {
+      if (status.isFinished) {
+        this._statusSubscription?.remove();
+        this._statusSubscription = null;
+        const uri = this.recorder?.uri;
+        this.recorder?.release();
+        this.recorder = null;
+        if (uri) await this._playAndRelease(uri);
+        onAutoStop?.(uri);
+      }
+    });
+
     this.recorder.record({ forDuration: MAX_RECORDING_DURATION_MS / 1000 });
   }
 
@@ -58,6 +73,10 @@ class MicRecorderService {
     if (!this.recorder) {
       throw new Error('No active recording');
     }
+
+    // Remove the auto-stop listener before stopping to avoid it firing during manual stop.
+    this._statusSubscription?.remove();
+    this._statusSubscription = null;
 
     await this.recorder.stop();
     const uri = this.recorder.uri;
