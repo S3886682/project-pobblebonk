@@ -42,6 +42,10 @@ class MicRecorderService {
 
   // onAutoStop is called if the recorder hits MAX_RECORDING_DURATION_MS and stops itself.
   async startRecording(onAutoStop) {
+    if (this.recorder) {
+      throw new Error('Recording already in progress');
+    }
+
     const { granted } = await requestRecordingPermissionsAsync();
     if (!granted) {
       throw new Error('Microphone permission not granted');
@@ -93,8 +97,16 @@ class MicRecorderService {
     const player = createAudioPlayer(uri);
 
     await new Promise((resolve) => {
+      // Fallback timeout in case didJustFinish never fires (e.g. corrupt/empty recording).
+      const timeout = setTimeout(() => {
+        subscription.remove();
+        player.release();
+        resolve();
+      }, MAX_RECORDING_DURATION_MS);
+
       const subscription = player.addListener('playbackStatusUpdate', (status) => {
         if (status.didJustFinish) {
+          clearTimeout(timeout);
           subscription.remove();
           player.release();
           resolve();
