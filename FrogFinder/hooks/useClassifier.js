@@ -6,7 +6,7 @@ const DUMMY_SPECIES = [
     scientificName: 'Limnodynastes dumerilii',
     confidence: 0.92,
     description: 'A distinctive frog known for its deep, popping call',
-    habitat: 'Marshes, swamps, and wet grasslands',
+    habitat: 'Victoria, Tasmania, NSW',
     size: '3-4 cm',
     callDescription: 'Deep bonk sound, like a wooden drum',
     conservationStatus: 'Least Concern',
@@ -16,7 +16,7 @@ const DUMMY_SPECIES = [
     scientificName: 'Litoria caerulea',
     confidence: 0.87,
     description: 'A bright green frog commonly kept as a pet',
-    habitat: 'Rainforests, woodlands, and gardens',
+    habitat: 'Victoria, Tasmania, NSW, QLD',
     size: '6-10 cm',
     callDescription: 'Loud, repetitive kwack or quack call',
     conservationStatus: 'Least Concern',
@@ -26,7 +26,7 @@ const DUMMY_SPECIES = [
     scientificName: 'Litoria raniformis',
     confidence: 0.78,
     description: 'A large green frog with a distinctive call',
-    habitat: 'Swamps and wetlands with emergent vegetation',
+    habitat: 'Victoria, Tasmania, NSW, QLD',
     size: '4-6 cm',
     callDescription: 'Loud, deep bonk-bonk call',
     conservationStatus: 'Vulnerable',
@@ -34,9 +34,9 @@ const DUMMY_SPECIES = [
   {
     name: 'Common Eastern Froglet',
     scientificName: 'Crinia signifera',
-    confidence: 0.84,
+    confidence: 0.45,
     description: 'A small frog with a distinctive call',
-    habitat: 'Wet forests and grasslands',
+    habitat: 'Victoria, Tasmania, NSW, QLD',
     size: '2-3 cm',
     callDescription: 'High-pitched trill',
     conservationStatus: 'Least Concern',
@@ -91,9 +91,14 @@ export const useClassifier = () => {
           },
         ],
       };
+
+      const classificationDetails = {
+        recordingLength: '12.2',
+        timestamp: new Date().toISOString(),
+      };
       
-      console.log('[STUB] Classification result:', result);
-      setClassification(result);
+      console.log('[STUB] Classification result:', result, 'Details:', classificationDetails);
+      setClassification({ ...result, details: classificationDetails });
       return result;
     } catch (err) {
       setError(err.message);

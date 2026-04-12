@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, PanResponder, Animated, Text, TouchableOpacity } from 'react-native';
+import { useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, PanResponder } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AboutScreen } from './screens/AboutScreen';
@@ -7,83 +7,96 @@ import { ClassifyScreen } from './screens/ClassifyScreen';
 import { SightingsScreen } from './screens/SightingsScreen';
 import { Theme } from './config/Theme';
 
-const SCREENS = [
-  { name: 'About', component: AboutScreen },
-  { name: 'Classify', component: ClassifyScreen },
+const TABS = [
+  { name: 'About',    component: AboutScreen },
+  { name: 'Record',   component: ClassifyScreen },
   { name: 'Sightings', component: SightingsScreen },
 ];
 
-// TODO: This handles screen navigation. Only a POC, front-end to handle how this interation works. Navigation buttons?
-// TODO: This should honestly be replaced, I just needed something to handle screen navigation for testing the individual screens. Possible library that handles this?
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState(0);
-  const currentScreenRef = React.useRef(0);
-  const pan = React.useRef(new Animated.ValueXY()).current;
+  const [activeTab, setActiveTab] = useState(1);
+  const activeTabRef = useRef(1);
 
-  const panResponder = React.useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderRelease: (event, gestureState) => {
-        const swipeThreshold = 50;
-        const screen = currentScreenRef.current;
-        
-        if (gestureState.dx > swipeThreshold && screen > 0) {
-          setCurrentScreen(screen - 1);
-        } else if (gestureState.dx < -swipeThreshold && screen < SCREENS.length - 1) {
-          setCurrentScreen(screen + 1);
-        }
-        
-        Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
-      },
-    })
-  ).current;
-
-  useEffect(() => {
-    currentScreenRef.current = currentScreen;
-  }, [currentScreen]);
-
-  const CurrentScreen = SCREENS[currentScreen].component;
+  const panResponder = useRef(PanResponder.create({
+    onMoveShouldSetPanResponder: (_, { dx, dy }) => Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10,
+    onPanResponderRelease: (_, { dx }) => {
+      const i = activeTabRef.current;
+      if (dx < -50 && i < TABS.length - 1) { activeTabRef.current = i + 1; setActiveTab(i + 1); }
+      if (dx >  50 && i > 0)               { activeTabRef.current = i - 1; setActiveTab(i - 1); }
+    },
+  })).current;
 
   return (
-    <View style={{ flex: 1, backgroundColor: Theme.colors.surface }}>
-      <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Theme.colors.surface }}>
-        <View style={{ flex: 1, backgroundColor: Theme.colors.surface }} {...panResponder.panHandlers}>
-          <CurrentScreen />
+    <View style={{ flex: 1, backgroundColor: Theme.colors.background }}>
+      <StatusBar style="light" />
+
+      <SafeAreaView edges={['top']} style={{ backgroundColor: Theme.colors.background }}>
+        <Text style={styles.subtitle}>BIOACOUSTICS</Text>
+        <Text style={styles.title}>FrogFinder</Text>
+
+        <View style={styles.tabBar}>
+          {TABS.map((tab, i) => (
+            <TouchableOpacity
+              key={tab.name}
+              onPress={() => { activeTabRef.current = i; setActiveTab(i); }}
+              style={[styles.tab, activeTab === i && styles.tabActive]}
+            >
+              <Text style={[styles.tabText, activeTab === i && styles.tabTextActive]}>
+                {tab.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </SafeAreaView>
 
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => currentScreen > 0 && setCurrentScreen(currentScreen - 1)} disabled={currentScreen === 0}>
-          <Text style={{ opacity: currentScreen === 0 ? 0.5 : 1 }}>← Back</Text>
-        </TouchableOpacity>
-        
-        <Text style={styles.headerTitle}>{SCREENS[currentScreen].name}</Text>
-        
-        <TouchableOpacity onPress={() => currentScreen < SCREENS.length - 1 && setCurrentScreen(currentScreen + 1)} disabled={currentScreen === SCREENS.length - 1}>
-          <Text style={{ opacity: currentScreen === SCREENS.length - 1 ? 0.5 : 1 }}>Next →</Text>
-        </TouchableOpacity>
+      <View style={{ flex: 1 }} {...panResponder.panHandlers}>
+        {TABS.map(({ name, component: Screen }, i) => (
+          <View key={name} style={{ flex: 1, display: activeTab === i ? 'flex' : 'none' }}>
+            <Screen />
+          </View>
+        ))}
       </View>
-
-      <StatusBar style="auto" />
     </View>
   );
-};
+}
 
 const styles = {
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: Theme.spacing.md,
-    paddingVertical: Theme.spacing.md,
-    paddingBottom: 70,
-    backgroundColor: Theme.colors.primary,
-    marginBottom: 0,
+  subtitle: {
+    textAlign: 'center',
+    letterSpacing: 4,
+    fontSize: 11,
+    color: Theme.colors.textSecondary,
+    marginTop: Theme.spacing.md,
   },
-  headerTitle: {
-    ...Theme.typography.body,
+  title: {
+    textAlign: 'center',
+    fontSize: 36,
     fontWeight: 'bold',
-    color: Theme.colors.surface,
+    color: Theme.colors.text,
+    marginVertical: Theme.spacing.sm,
+  },
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: Theme.colors.card,
+    borderRadius: Theme.borderRadius.full,
+    margin: Theme.spacing.md,
+    padding: 4,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: Theme.spacing.sm,
+    borderRadius: Theme.borderRadius.full,
+    alignItems: 'center',
+  },
+  tabActive: {
+    backgroundColor: Theme.colors.text,
+  },
+  tabText: {
+    color: Theme.colors.textSecondary,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  tabTextActive: {
+    color: Theme.colors.background,
   },
 };
