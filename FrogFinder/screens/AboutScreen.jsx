@@ -1,13 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, ImageBackground } from 'react-native';
 import { Theme } from '../config/Theme';
 
 export const AboutScreen = () => {
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../assets/images/background_image.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
       <Text style={styles.title}>About FrogFinder</Text>
       <Text>Description of the application.</Text>
-    </View>
+    </ImageBackground>
   );
 };
 
