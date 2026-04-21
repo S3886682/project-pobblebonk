@@ -6,6 +6,18 @@ import { useClassifier } from '../hooks/useClassifier';
 import { filePickerService } from '../services/filePickerService';
 import { Theme } from '../config/Theme';
 
+// ─── Small reusable pieces ────────────────────────────────────────────────────
+
+const SectionLabel = ({ text }) => (
+  <Text style={styles.sectionLabel}>{text}</Text>
+);
+
+const ConfidenceBar = ({ confidence, alt }) => (
+  <View style={styles.barTrack}>
+    <View style={[styles.barFill, alt && styles.barFillAlt, { width: `${confidence * 100}%` }]} />
+  </View>
+);
+
 const DetailRow = ({ label, value, last }) => (
   <View style={[styles.detailRow, !last && styles.detailRowBorder]}>
     <Text style={styles.detailLabel}>{label}</Text>
@@ -13,10 +25,100 @@ const DetailRow = ({ label, value, last }) => (
   </View>
 );
 
+// ─── Cards ────────────────────────────────────────────────────────────────────
+
+const ResultsCard = ({ classification, loading }) => {
+  const [showAlternatives, setShowAlternatives] = useState(false);
+  const { topMatch, alternatives, details } = classification ?? {};
+
+  const timestamp = details
+    ? `${details.recordingLength}s · ${new Date(details.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+    : 'just now';
+
+  return (
+    <View style={styles.card}>
+
+      <Text style={styles.cardTitle}>Recording analysed</Text>
+      <Text style={styles.cardSubtitle}>{timestamp}</Text>
+      <View style={styles.divider} />
+
+      {loading ? (
+        <ActivityIndicator color={Theme.colors.primary} size="large" style={{ marginVertical: 24 }} />
+      ) : (
+        <>
+          {/* Top match */}
+          <View style={styles.matchRow}>
+            <View style={styles.frogImage} />
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <Text style={styles.matchName}>{topMatch.name}</Text>
+              <Text style={styles.matchScientific}>{topMatch.scientificName}</Text>
+            </View>
+            <Text style={styles.matchConfidence}>{(topMatch.confidence * 100).toFixed(0)}%</Text>
+          </View>
+          <ConfidenceBar confidence={topMatch.confidence} />
+
+          {/* Alternatives */}
+          {showAlternatives && alternatives.map((alt, i) => (
+            <View key={i} style={{ marginTop: 16 }}>
+              <View style={styles.matchRow}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.altName}>{alt.name}</Text>
+                  <Text style={styles.matchScientific}>{alt.scientificName}</Text>
+                </View>
+                <Text style={styles.altConfidence}>{(alt.confidence * 100).toFixed(0)}%</Text>
+              </View>
+              <ConfidenceBar confidence={alt.confidence} alt />
+            </View>
+          ))}
+
+          <TouchableOpacity onPress={() => setShowAlternatives(v => !v)} style={styles.toggleBtn}>
+            <Text style={styles.toggleText}>
+              {showAlternatives ? 'Hide alternatives ∧' : 'Show alternatives ∨'}
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  );
+};
+
+const SpeciesDetailsCard = ({ topMatch }) => (
+  <View style={styles.card}>
+    <DetailRow label="Description"  value={topMatch.description} />
+    <DetailRow label="Habitat"      value={topMatch.habitat} />
+    <DetailRow label="Size"         value={topMatch.size} />
+    <DetailRow label="Call"         value={topMatch.callDescription} />
+    <DetailRow label="Conservation" value={topMatch.conservationStatus} last />
+  </View>
+);
+
+const BottomBar = ({ isRecording, isStopping, onRecord, onUpload }) => (
+  <SafeAreaView edges={['bottom']} style={styles.bar}>
+    <TouchableOpacity style={styles.sideBtn} onPress={onUpload}>
+      <Text style={styles.sideIcon}>↑</Text>
+      <Text style={styles.sideLabel}>UPLOAD</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={[styles.recordBtn, isRecording && styles.recordBtnActive, isStopping && styles.recordBtnDisabled]}
+      disabled={isStopping}
+      onPress={onRecord}
+    >
+      <Text style={styles.recordLabel}>{isRecording ? 'Stop' : 'Record'}</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.sideBtn}>
+      <Text style={styles.sideIcon}>▶</Text>
+      <Text style={styles.sideLabel}>PLAY</Text>
+    </TouchableOpacity>
+  </SafeAreaView>
+);
+
+// ─── Screen ───────────────────────────────────────────────────────────────────
+
 export const ClassifyScreen = () => {
   const { isRecording, startRecording, stopRecording } = useRecorder();
   const { classify, classification, loading } = useClassifier();
-  const [showAlternatives, setShowAlternatives] = useState(false);
   const [isStopping, setIsStopping] = useState(false);
 
   const handleRecord = async () => {
@@ -35,119 +137,39 @@ export const ClassifyScreen = () => {
     if (uri) await classify(uri);
   };
 
+  const hasResults = classification || loading;
+
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.content}>
 
-        {/* Results card */}
-        {(classification || loading) && (
+        {hasResults && (
           <>
-            <Text style={styles.sectionLabel}>LATEST RECORDING</Text>
-            <View style={styles.card}>
-
-              {/* Card header */}
-              <View style={styles.cardHeader}>
-                <View>
-                  <Text style={styles.cardHeaderTitle}>Recording analysed</Text>
-                  <Text style={styles.cardHeaderSub}>
-                    {classification?.details
-                      ? `${classification.details.recordingLength}s · ${new Date(classification.details.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-                      : 'just now'}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.divider} />
-
-              {loading ? (
-                <ActivityIndicator color={Theme.colors.primary} size="large" style={{ marginVertical: 24 }} />
-              ) : (
-                <>
-                  {/* Top match */}
-                  <View style={styles.matchRow}>
-                    <View style={styles.frogImage} />
-                    <View style={{ flex: 1, marginLeft: 12 }}>
-                      <Text style={styles.matchName}>{classification.topMatch.name}</Text>
-                      <Text style={styles.matchScientific}>{classification.topMatch.scientificName}</Text>
-                    </View>
-                    <Text style={styles.matchConfidence}>
-                      {(classification.topMatch.confidence * 100).toFixed(0)}%
-                    </Text>
-                  </View>
-
-                  {/* Confidence bar */}
-                  <View style={styles.barTrack}>
-                    <View style={[styles.barFill, { width: `${classification.topMatch.confidence * 100}%` }]} />
-                  </View>
-
-                  {/* Alternatives */}
-                  {showAlternatives && classification.alternatives.map((alt, i) => (
-                    <View key={i} style={{ marginTop: 16 }}>
-                      <View style={styles.matchRow}>
-                        <View style={{ flex: 1 }}>
-                          <Text style={styles.altName}>{alt.name}</Text>
-                          <Text style={styles.matchScientific}>{alt.scientificName}</Text>
-                        </View>
-                        <Text style={styles.altConfidence}>
-                          {(alt.confidence * 100).toFixed(0)}%
-                        </Text>
-                      </View>
-                      <View style={styles.barTrack}>
-                        <View style={[styles.barFillAlt, { width: `${alt.confidence * 100}%` }]} />
-                      </View>
-                    </View>
-                  ))}
-
-                  <TouchableOpacity onPress={() => setShowAlternatives(v => !v)} style={styles.toggleBtn}>
-                    <Text style={styles.toggleText}>
-                      {showAlternatives ? 'Hide alternatives ∧' : 'Show alternatives ∨'}
-                    </Text>
-                  </TouchableOpacity>
-                </>
-              )}
-            </View>
+            <SectionLabel text="LATEST RECORDING" />
+            <ResultsCard classification={classification} loading={loading} />
           </>
         )}
 
-        {/* Details of frog card */}
         {classification && !loading && (
           <>
-            <Text style={styles.sectionLabel}>ABOUT THIS SPECIES</Text>
-            <View style={styles.card}>
-              <DetailRow label="Description" value={classification.topMatch.description} />
-              <DetailRow label="Habitat"     value={classification.topMatch.habitat} />
-              <DetailRow label="Size"        value={classification.topMatch.size} />
-              <DetailRow label="Call"        value={classification.topMatch.callDescription} />
-              <DetailRow label="Conservation" value={classification.topMatch.conservationStatus} last />
-            </View>
+            <SectionLabel text="ABOUT THIS SPECIES" />
+            <SpeciesDetailsCard topMatch={classification.topMatch} />
           </>
         )}
 
       </ScrollView>
 
-      {/* Bottom action bar */}
-      <SafeAreaView edges={['bottom']} style={styles.bar}>
-        <TouchableOpacity style={styles.sideBtn} onPress={handleUpload}>
-          <Text style={styles.sideIcon}>↑</Text>
-          <Text style={styles.sideLabel}>UPLOAD</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.recordBtn, isRecording && styles.recordBtnActive, isStopping && styles.recordBtnDisabled]}
-          disabled={isStopping}
-          onPress={handleRecord}
-        >
-          <Text style={styles.recordLabel}>{isRecording ? 'Stop' : 'Record'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.sideBtn}>
-          <Text style={styles.sideIcon}>▶</Text>
-          <Text style={styles.sideLabel}>PLAY</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
+      <BottomBar
+        isRecording={isRecording}
+        isStopping={isStopping}
+        onRecord={handleRecord}
+        onUpload={handleUpload}
+      />
     </View>
   );
 };
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = {
   screen: {
@@ -172,20 +194,15 @@ const styles = {
     borderRadius: 20,
     padding: Theme.spacing.md,
   },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: Theme.spacing.md,
-  },
-  cardHeaderTitle: {
+  cardTitle: {
     color: Theme.colors.text,
     fontWeight: '600',
     fontSize: 14,
   },
-  cardHeaderSub: {
+  cardSubtitle: {
     color: Theme.colors.textSecondary,
     fontSize: 12,
+    marginBottom: Theme.spacing.md,
   },
   divider: {
     height: 1,
@@ -217,6 +234,16 @@ const styles = {
     fontWeight: 'bold',
     fontSize: 18,
   },
+  altName: {
+    color: Theme.colors.text,
+    fontWeight: '600',
+    fontSize: 15,
+  },
+  altConfidence: {
+    color: Theme.colors.secondary,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   barTrack: {
     height: 6,
     backgroundColor: Theme.colors.border,
@@ -229,20 +256,8 @@ const styles = {
     backgroundColor: Theme.colors.primary,
     borderRadius: 3,
   },
-  altName: {
-    color: Theme.colors.text,
-    fontWeight: '600',
-    fontSize: 15,
-  },
-  altConfidence: {
-    color: Theme.colors.secondary,
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
   barFillAlt: {
-    height: '100%',
     backgroundColor: Theme.colors.secondary,
-    borderRadius: 3,
   },
   toggleBtn: {
     alignItems: 'center',
@@ -270,8 +285,6 @@ const styles = {
     color: Theme.colors.text,
     fontSize: 14,
   },
-
-  // Bottom bar
   bar: {
     position: 'absolute',
     bottom: 0,
@@ -307,16 +320,12 @@ const styles = {
     paddingVertical: 16,
     paddingHorizontal: 40,
     borderRadius: Theme.borderRadius.full,
-    gap: 8,
   },
   recordBtnActive: {
     backgroundColor: Theme.colors.error,
   },
   recordBtnDisabled: {
     opacity: 0.5,
-  },
-  recordIcon: {
-    fontSize: 18,
   },
   recordLabel: {
     color: Theme.colors.background,

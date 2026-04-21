@@ -3,13 +3,7 @@ import { useState, useCallback } from 'react';
 const DUMMY_SPECIES = [
   {
     name: 'Pobblebonk',
-    scientificName: 'Limnodynastes dumerilii',
     confidence: 0.92,
-    description: 'A distinctive frog known for its deep, popping call',
-    habitat: 'Victoria, Tasmania, NSW',
-    size: '3-4 cm',
-    callDescription: 'Deep bonk sound, like a wooden drum',
-    conservationStatus: 'Least Concern',
   },
   {
     name: 'Green Tree Frog',

@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, PanResponder } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { AboutScreen } from './screens/AboutScreen';
 import { ClassifyScreen } from './screens/ClassifyScreen';
 import { SightingsScreen } from './screens/SightingsScreen';
@@ -27,6 +27,7 @@ export default function App() {
   })).current;
 
   return (
+    <SafeAreaProvider>
     <View style={{ flex: 1, backgroundColor: Theme.colors.background }}>
       <StatusBar style="light" />
 
@@ -57,6 +58,7 @@ export default function App() {
         ))}
       </View>
     </View>
+    </SafeAreaProvider>
   );
 }
 

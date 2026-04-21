@@ -34,7 +34,6 @@ const SightingCard = ({ item }) => {
           ))}
         </View>
       )}
-
     </View>
   );
 };
