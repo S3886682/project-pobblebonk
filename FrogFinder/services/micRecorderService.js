@@ -1,4 +1,4 @@
-import { AudioModule, requestRecordingPermissionsAsync, setAudioModeAsync, createAudioPlayer, IOSOutputFormat, AudioQuality } from 'expo-audio';
+import { AudioModule, requestRecordingPermissionsAsync, setAudioModeAsync, IOSOutputFormat, AudioQuality } from 'expo-audio';
 import { Platform } from 'react-native';
 
 const MAX_RECORDING_DURATION_MS = 30000; // 30 seconds
@@ -7,7 +7,7 @@ const MAX_RECORDING_DURATION_MS = 30000; // 30 seconds
 const COMMON_OPTIONS = {
   extension: '.m4a',
   sampleRate: 44100,
-  numberOfChannels: 1, 
+  numberOfChannels: 1,
   bitRate: 128000,
   isMeteringEnabled: false,
 };
@@ -28,7 +28,7 @@ const PLATFORM_OPTIONS = Platform.select({
   },
   default: {
     ...COMMON_OPTIONS,
-    mimeType: 'audio/webm', 
+    mimeType: 'audio/webm',
   },
 });
 
@@ -64,7 +64,8 @@ class MicRecorderService {
         const uri = this.recorder?.uri;
         this.recorder?.release();
         this.recorder = null;
-        if (uri) await this._playAndRelease(uri);
+        // Reset audio session back to playback mode
+        await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
         onAutoStop?.(uri);
       }
     });
@@ -72,7 +73,7 @@ class MicRecorderService {
     this.recorder.record({ forDuration: MAX_RECORDING_DURATION_MS / 1000 });
   }
 
-  // Stops recording, plays back for verification, returns the file URI.
+  // Stops recording and returns the file URI.
   async stopRecording() {
     if (!this.recorder) {
       throw new Error('No active recording');
@@ -87,33 +88,9 @@ class MicRecorderService {
     this.recorder.release();
     this.recorder = null;
 
-    await this._playAndRelease(uri);
-    return uri;
-  }
-
-  // Switches to playback mode (routes audio to speaker) and plays the file once after recording.
-  async _playAndRelease(uri) {
+    // Reset audio session back to playback mode
     await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
-    const player = createAudioPlayer(uri);
-
-    await new Promise((resolve) => {
-      // Fallback timeout in case didJustFinish never fires (e.g. corrupt/empty recording).
-      const timeout = setTimeout(() => {
-        subscription.remove();
-        player.release();
-        resolve();
-      }, MAX_RECORDING_DURATION_MS);
-
-      const subscription = player.addListener('playbackStatusUpdate', (status) => {
-        if (status.didJustFinish) {
-          clearTimeout(timeout);
-          subscription.remove();
-          player.release();
-          resolve();
-        }
-      });
-      player.play();
-    });
+    return uri;
   }
 }
 
