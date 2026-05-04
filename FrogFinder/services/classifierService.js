@@ -8,6 +8,14 @@ import Meyda from 'meyda';
 
 
 class ClassifierService {
+  SR = 32000;
+  WIN_SAMPLES = Math.round(this.SR * 0.3);     // 9600
+  STRIDE_SAMPLES = Math.round(this.SR * 0.2);  // 6400
+  N_MFCC = 40;
+  FFT_SIZE = 2048;
+  HOP_SIZE = 512;
+  _meydaLogged = false;
+
   constructor() {
     this.model = null;
   }
@@ -39,7 +47,7 @@ class ClassifierService {
     const votes = new Array(nClasses).fill(0);
 
     // Precompute kernel values for all support vectors once
-    const kernelVals = this.model.support_vectors.map(sv => rbfKernel(scaled, sv, this.model.gamma));
+    const kernelVals = this.model.support_vectors.map(sv => this.rbfKernel(scaled, sv, this.model.gamma));
 
     // Build SV class start indices from n_support
     const svStart = new Array(nClasses).fill(0);
@@ -93,16 +101,16 @@ class ClassifierService {
     // Octave band edges in Hz: [0, 200, 400, 800, 1600, 3200, 6400, 12800, SR/2]
     const edgesHz = [0];
     for (let b = 0; b <= nBands; b++) edgesHz.push(200 * Math.pow(2, b));
-    edgesHz.push(SR / 2);
+    edgesHz.push(this.SR / 2);
 
     const frames = [];
-    for (let i = 0; i + FFT_SIZE <= segment.length; i += HOP_SIZE) {
-      const frame = segment.slice(i, i + FFT_SIZE);
+    for (let i = 0; i + this.FFT_SIZE <= segment.length; i += this.HOP_SIZE) {
+      const frame = segment.slice(i, i + this.FFT_SIZE);
       const power = Meyda.extract('powerSpectrum', frame);
       if (!power) { frames.push(new Array(nBands + 1).fill(0)); continue; }
       const mags = power.map(Math.sqrt);
       const nBins = mags.length;
-      const edgesBins = edgesHz.map(f => Math.min(nBins, Math.round(f * FFT_SIZE / SR)));
+      const edgesBins = edgesHz.map(f => Math.min(nBins, Math.round(f * this.FFT_SIZE / this.SR)));
 
       const contrast = [];
       for (let b = 0; b <= nBands; b++) {
@@ -120,35 +128,35 @@ class ClassifierService {
 
   //let _meydaLogged = false;
   extractFeatures(segment) {
-    Meyda.sampleRate = SR;
-    Meyda.numberOfMFCCCoefficients = N_MFCC;
+    Meyda.sampleRate = this.SR;
+    Meyda.numberOfMFCCCoefficients = this.N_MFCC;
 
     const mfccFrames = [];
     const centroidFrames = [];
-    for (let i = 0; i + FFT_SIZE <= segment.length; i += HOP_SIZE) {
-      const frame = segment.slice(i, i + FFT_SIZE);
+    for (let i = 0; i + this.FFT_SIZE <= segment.length; i += this.HOP_SIZE) {
+      const frame = segment.slice(i, i + this.FFT_SIZE);
       const mfcc = Meyda.extract('mfcc', frame);
       const centroid = Meyda.extract('spectralCentroid', frame);
-      if (!_meydaLogged && mfcc) {
+      if (!this._meydaLogged && mfcc) {
         console.log('[MEYDA] numberOfMelBands:', Meyda.numberOfMelBands);
         console.log('[MEYDA] numberOfMFCCCoefficients:', Meyda.numberOfMFCCCoefficients);
         console.log('[MEYDA] mfcc.length:', mfcc.length);
         console.log('[MEYDA] mfcc type:', Object.prototype.toString.call(mfcc));
-        _meydaLogged = true;
+        this._meydaLogged = true;
       }
       if (mfcc) mfccFrames.push(Array.from(mfcc));
       centroidFrames.push([centroid ?? 0]);
     }
 
-    const delta1 = computeDelta(mfccFrames);
-    const delta2 = computeDelta(delta1);
-    const contrastFrames = computeContrastFrames(segment);
+    const delta1 = this.computeDelta(mfccFrames);
+    const delta2 = this.computeDelta(delta1);
+    const contrastFrames = this.computeContrastFrames(segment);
 
-    const mfccMean = colMean(mfccFrames);   const mfccStd = colStd(mfccFrames, mfccMean);
-    const d1Mean = colMean(delta1);         const d1Std = colStd(delta1, d1Mean);
-    const d2Mean = colMean(delta2);         const d2Std = colStd(delta2, d2Mean);
-    const contMean = colMean(contrastFrames); const contStd = colStd(contrastFrames, contMean);
-    const centMean = colMean(centroidFrames); const centStd = colStd(centroidFrames, centMean);
+    const mfccMean = this.colMean(mfccFrames);   const mfccStd = this.colStd(mfccFrames, mfccMean);
+    const d1Mean = this.colMean(delta1);         const d1Std = this.colStd(delta1, d1Mean);
+    const d2Mean = this.colMean(delta2);         const d2Std = this.colStd(delta2, d2Mean);
+    const contMean = this.colMean(contrastFrames); const contStd = this.colStd(contrastFrames, contMean);
+    const centMean = this.colMean(centroidFrames); const centStd = this.colStd(centroidFrames, centMean);
 
     // Matches server.py hstack order: mfcc, d1, d2, contrast, centroid × (mean, std)
     return [
@@ -177,107 +185,10 @@ class ClassifierService {
     return { label: winner, confidence: counts[winner] / filtered.length };
   }
 
-  processAudio = async (uri) => {
-    setStatus('Reading file...');
-    const base64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
-    const bytes = Buffer.from(base64, 'base64');
-
-    setStatus('Decoding PCM...');
-    // Parse RIFF/WAV header properly to find the data chunk offset,
-    // sample rate, bit depth, and channel count — never assume 44 bytes.
-    let dataOffset = -1, fileSr = SR, bitsPerSample = 16, numChannels = 1;
-    try {
-      let pos = 12; // skip RIFF(4) + fileSize(4) + WAVE(4)
-      while (pos + 8 <= bytes.length) {
-        const chunkId   = bytes.toString('ascii', pos, pos + 4);
-        const chunkSize = bytes.readUInt32LE(pos + 4);
-        if (chunkId === 'fmt ') {
-          numChannels  = bytes.readUInt16LE(pos + 10);
-          fileSr       = bytes.readUInt32LE(pos + 12);
-          bitsPerSample = bytes.readUInt16LE(pos + 22);
-        } else if (chunkId === 'data') {
-          dataOffset = pos + 8;
-          break;
-        }
-        pos += 8 + chunkSize + (chunkSize % 2); // chunks are word-aligned
-      }
-    } catch (_) {}
-
-    if (dataOffset < 0) {
-      setStatus('Error: could not parse WAV header');
-      return;
-    }
-    if (bitsPerSample !== 16) {
-      setStatus(`Error: unsupported bit depth (${bitsPerSample}-bit). Please use 16-bit WAV.`);
-      return;
-    }
-
-    const bytesPerSample = bitsPerSample / 8;
-    const nSamplesTotal  = Math.floor((bytes.length - dataOffset) / (bytesPerSample * numChannels));
-    // Decode first channel only (mono mix)
-    const monoData = new Float32Array(nSamplesTotal);
-    for (let i = 0; i < nSamplesTotal; i++) {
-      const offset = dataOffset + i * bytesPerSample * numChannels;
-      monoData[i] = bytes.readInt16LE(offset) / 32768;
-    }
-
-    // Resample if the file isn't at the expected SR (linear interpolation)
-    let audioData = monoData;
-    if (fileSr !== SR) {
-      console.log(`[WAV] Resampling from ${fileSr} Hz → ${SR} Hz`);
-      const ratio = fileSr / SR;
-      const newLen = Math.round(monoData.length / ratio);
-      audioData = new Float32Array(newLen);
-      for (let i = 0; i < newLen; i++) {
-        const pos  = i * ratio;
-        const idx  = Math.floor(pos);
-        const frac = pos - idx;
-        const a    = monoData[Math.min(idx,     monoData.length - 1)];
-        const b    = monoData[Math.min(idx + 1, monoData.length - 1)];
-        audioData[i] = a + frac * (b - a);
-      }
-    }
-    console.log(`[WAV] dataOffset=${dataOffset} sr=${fileSr} bits=${bitsPerSample} ch=${numChannels} samples=${audioData.length}`);
-
-    setStatus('Classifying...');
-    const totalWindows = Math.max(0, Math.floor((audioData.length - WIN_SAMPLES) / STRIDE_SAMPLES) + 1);
-    setProgress(0);
-    const windowPredictions = [];
-    let firstFeatures = null;
-    let windowIdx = 0;
-    for (let start = 0; start + WIN_SAMPLES <= audioData.length; start += STRIDE_SAMPLES) {
-      const segment = audioData.slice(start, start + WIN_SAMPLES);
-      const features = extractFeatures(segment);
-      if (!firstFeatures) {
-        firstFeatures = features;
-        const scaled = features.map((v, i) => (v - this.model.scaler_mean[i]) / this.model.scaler_scale[i]);
-        const kernelVals = this.model.support_vectors.map(sv => rbfKernel(scaled, sv, this.model.gamma));
-        const maxK = Math.max(...kernelVals);
-        const meanK = kernelVals.reduce((a, b) => a + b, 0) / kernelVals.length;
-        console.log('[FEATURES] count:', features.length);
-        console.log('[FEATURES] first 10 raw:', features.slice(0, 10));
-        console.log('[FEATURES] first 10 scaled:', scaled.slice(0, 10));
-        console.log('[KERNEL] max:', maxK, 'mean:', meanK);
-        console.log('[KERNEL] non-zero count:', kernelVals.filter(v => v > 1e-10).length, '/', kernelVals.length);
-      }
-      windowPredictions.push(predict(features));
-      windowIdx++;
-      setProgress(windowIdx / totalWindows);
-      // Yield to UI thread every 5 windows so the progress bar actually renders
-      if (windowIdx % 5 === 0) await new Promise(r => setTimeout(r, 0));
-    }
-    setProgress(null);
-    console.log('[PREDICT] window predictions:', windowPredictions);
-
-    if (!windowPredictions.length) { setStatus('Audio too short to classify'); return; }
-    const { label, confidence } = majorityVote(windowPredictions);
-    setPrediction({ label, confidence });
-    setStatus(`${windowPredictions.length} windows analysed`);
-  };
+  
 
   
-  // TODO: Implement actual model loading and prediction logic.
-  // TODO: MFCC Extraction to be done here.
+
   
 }
 export const classifierService = new ClassifierService();
