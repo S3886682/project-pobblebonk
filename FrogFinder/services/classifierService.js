@@ -17,7 +17,7 @@ class ClassifierService {
   _meydaLogged = false;
 
   constructor() {
-    this.model = null;
+    this.model = require('./svm_model.json');
   }
 
   rbfKernel(x, y, gamma) {
@@ -184,6 +184,98 @@ class ClassifierService {
     // Window agreement: how many non-background windows chose the winner
     return { label: winner, confidence: counts[winner] / filtered.length };
   }
+
+  processAudio = async (uri, setStatus, setProgress) => {
+    setStatus('Reading file...');
+    const base64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
+    const bytes = Buffer.from(base64, 'base64');
+
+    setStatus('Decoding PCM...');
+    let dataOffset = -1, fileSr = this.SR, bitsPerSample = 16, numChannels = 1;
+    try {
+      let pos = 12;
+      while (pos + 8 <= bytes.length) {
+        const chunkId   = bytes.toString('ascii', pos, pos + 4);
+        const chunkSize = bytes.readUInt32LE(pos + 4);
+        if (chunkId === 'fmt ') {
+          numChannels   = bytes.readUInt16LE(pos + 10);
+          fileSr        = bytes.readUInt32LE(pos + 12);
+          bitsPerSample = bytes.readUInt16LE(pos + 22);
+        } else if (chunkId === 'data') {
+          dataOffset = pos + 8;
+          break;
+        }
+        pos += 8 + chunkSize + (chunkSize % 2);
+      }
+    } catch (_) {}
+
+    if (dataOffset < 0) throw new Error('Could not parse WAV header');
+    if (bitsPerSample !== 16) throw new Error(`Unsupported bit depth (${bitsPerSample}-bit). Please use 16-bit WAV.`);
+
+    const bytesPerSample = bitsPerSample / 8;
+    const nSamplesTotal  = Math.floor((bytes.length - dataOffset) / (bytesPerSample * numChannels));
+    const monoData = new Float32Array(nSamplesTotal);
+    for (let i = 0; i < nSamplesTotal; i++) {
+      const offset = dataOffset + i * bytesPerSample * numChannels;
+      monoData[i] = bytes.readInt16LE(offset) / 32768;
+    }
+
+    let audioData = monoData;
+    if (fileSr !== this.SR) {
+      setStatus(`Resampling from ${fileSr} Hz to ${this.SR} Hz...`);
+      console.log(`[WAV] Resampling from ${fileSr} Hz → ${this.SR} Hz`);
+      const ratio = fileSr / this.SR;
+      const newLen = Math.round(monoData.length / ratio);
+      audioData = new Float32Array(newLen);
+      for (let i = 0; i < newLen; i++) {
+        const pos  = i * ratio;
+        const idx  = Math.floor(pos);
+        const frac = pos - idx;
+        const a    = monoData[Math.min(idx,     monoData.length - 1)];
+        const b    = monoData[Math.min(idx + 1, monoData.length - 1)];
+        audioData[i] = a + frac * (b - a);
+      }
+    }
+    console.log(`[WAV] dataOffset=${dataOffset} sr=${fileSr} bits=${bitsPerSample} ch=${numChannels} samples=${audioData.length}`);
+
+    setStatus('Classifying...');
+    const totalWindows = Math.max(0, Math.floor((audioData.length - this.WIN_SAMPLES) / this.STRIDE_SAMPLES) + 1);
+    setProgress(0);
+
+    const windowPredictions = [];
+    let firstFeatures = null;
+    let windowIdx = 0;
+
+    for (let start = 0; start + this.WIN_SAMPLES <= audioData.length; start += this.STRIDE_SAMPLES) {
+      const segment = audioData.slice(start, start + this.WIN_SAMPLES);
+      const features = this.extractFeatures(segment);
+
+      if (!firstFeatures) {
+        firstFeatures = features;
+        const scaled = features.map((v, i) => (v - this.model.scaler_mean[i]) / this.model.scaler_scale[i]);
+        const kernelVals = this.model.support_vectors.map(sv => this.rbfKernel(scaled, sv, this.model.gamma));
+        const maxK = Math.max(...kernelVals);
+        const meanK = kernelVals.reduce((a, b) => a + b, 0) / kernelVals.length;
+        console.log('[FEATURES] count:', features.length);
+        console.log('[FEATURES] first 10 raw:', features.slice(0, 10));
+        console.log('[FEATURES] first 10 scaled:', scaled.slice(0, 10));
+        console.log('[KERNEL] max:', maxK, 'mean:', meanK);
+        console.log('[KERNEL] non-zero count:', kernelVals.filter(v => v > 1e-10).length, '/', kernelVals.length);
+      }
+
+      windowPredictions.push(this.predict(features));
+      windowIdx++;
+      setProgress(windowIdx / totalWindows);
+      if (windowIdx % 5 === 0) await new Promise(r => setTimeout(r, 0));
+    }
+
+    console.log('[PREDICT] window predictions:', windowPredictions);
+
+    if (!windowPredictions.length) throw new Error('Audio too short to classify');
+
+    const { label, confidence } = this.majorityVote(windowPredictions);
+    return { label, confidence, windowCount: windowPredictions.length };
+  };
 
   
 
