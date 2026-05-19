@@ -1,0 +1,124 @@
+{
+  "timestamp": "2026-05-20T08:43:11.151983",
+  "baseline": {
+    "sr": 32000,
+    "win_sec": 0.5,
+    "n_mfcc": 20,
+    "n_fft": 2048,
+    "hop_length": 512,
+    "aug_noise_lvl": 0.3
+  },
+  "runs": [
+    {
+      "label": "mfcc30+hop256",
+      "params": {
+        "n_mfcc": 30,
+        "hop_length": 256
+      },
+      "val_f1": 0.8652,
+      "accuracy": 0.8889,
+      "correct": 32,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Red-groined Froglet",
+        "Martins Toadlet",
+        "Tylers Toadlet"
+      ]
+    },
+    {
+      "label": "mfcc30+noise0.5",
+      "params": {
+        "n_mfcc": 30,
+        "aug_noise_lvl": 0.5
+      },
+      "val_f1": 0.8746,
+      "accuracy": 0.7778,
+      "correct": 28,
+      "total": 36,
+      "failing": [
+        "Peron's Tree Frog",
+        "Southern Smooth Froglet",
+        "Southern Barred Frog",
+        "Red-groined Froglet",
+        "Dendys Toadlet",
+        "Martins Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "mfcc30+fft1024",
+      "params": {
+        "n_mfcc": 30,
+        "n_fft": 1024
+      },
+      "val_f1": 0.8878,
+      "accuracy": 0.8611,
+      "correct": 31,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Peron's Tree Frog",
+        "Littlejohns Tree Frog",
+        "Dendys Toadlet",
+        "Blue Mountains Tree Frog"
+      ]
+    },
+    {
+      "label": "mfcc30+hop256+noise0.5",
+      "params": {
+        "n_mfcc": 30,
+        "hop_length": 256,
+        "aug_noise_lvl": 0.5
+      },
+      "val_f1": 0.8442,
+      "accuracy": 0.8889,
+      "correct": 32,
+      "total": 36,
+      "failing": [
+        "Peron's Tree Frog",
+        "Martins Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "mfcc30+hop256+fft1024",
+      "params": {
+        "n_mfcc": 30,
+        "hop_length": 256,
+        "n_fft": 1024
+      },
+      "val_f1": 0.8671,
+      "accuracy": 0.8889,
+      "correct": 32,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Peron's Tree Frog",
+        "Red-groined Froglet",
+        "Martins Toadlet"
+      ]
+    },
+    {
+      "label": "hop256+noise0.5",
+      "params": {
+        "hop_length": 256,
+        "aug_noise_lvl": 0.5
+      },
+      "val_f1": 0.8715,
+      "accuracy": 0.8333,
+      "correct": 30,
+      "total": 36,
+      "failing": [
+        "Southern Smooth Froglet",
+        "Dendys Toadlet",
+        "Martins Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    }
+  ]
+}

@@ -5,8 +5,8 @@ Usage:
     python train.py
 
 Output:
-    models/model.pkl          — trained model pipeline (scaler + SVM)
-    models/label_classes.json — list of species names the model knows
+    models/latest/model.pkl          — trained model pipeline (scaler + SVM)
+    models/latest/label_classes.json — list of species names the model knows
 
 To change parameters, edit config.py then re-run.
 Do NOT modify Testing Audio — that folder is reserved for evaluate.py only.
@@ -29,7 +29,7 @@ from features import build_dataset
 
 warnings.filterwarnings("ignore")
 
-MODEL_DIR = "models"
+MODEL_DIR = "models/latest"
 
 
 def main():

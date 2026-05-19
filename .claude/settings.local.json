@@ -10,7 +10,16 @@
       "WebFetch(domain:www.frogid.net.au)",
       "Bash(ffmpeg -version)",
       "Bash(python -c \"from pydub import AudioSegment; print\\('pydub ok'\\)\")",
-      "WebFetch(domain:api.inaturalist.org)"
+      "WebFetch(domain:api.inaturalist.org)",
+      "Bash(Get-ChildItem \"c:\\\\Users\\\\ashle\\\\OneDrive\\\\Documents\\\\Repos\\\\project-pobblebonk\\\\ModelTraining\\\\datasets\\\\updated\\\\Training Audio\" -Recurse -File)",
+      "Bash(Group-Object Extension)",
+      "Bash(Select-Object Name, Count)",
+      "PowerShell($files = @\\(\"16 Sloanes Froglet.wav\", \"19 Giant Burrowing Frog.wav\", \"29 Baw Baw Frog.wav\"\\); foreach \\($f in $files\\) { $path = \"c:\\\\Users\\\\ashle\\\\OneDrive\\\\Documents\\\\Repos\\\\project-pobblebonk\\\\ModelTraining\\\\datasets\\\\updated\\\\Testing Audio\\\\$f\"; $item = Get-Item $path; Write-Host \"$f : $\\($item.Length\\) bytes\" })",
+      "Bash(ls ~/.claude/projects/ | head -20)",
+      "Read(//c/Users/ashle/.claude/projects/**)",
+      "Bash(python3 -)",
+      "Bash(python3 -c ' *)",
+      "Bash(python sweep.py)"
     ]
   }
 }

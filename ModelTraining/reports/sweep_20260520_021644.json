@@ -1,0 +1,268 @@
+{
+  "timestamp": "2026-05-20T02:16:44.418116",
+  "baseline": {
+    "sr": 32000,
+    "win_sec": 0.5,
+    "n_mfcc": 20,
+    "n_fft": 2048,
+    "hop_length": 512,
+    "aug_noise_lvl": 0.3
+  },
+  "runs": [
+    {
+      "label": "baseline",
+      "params": {},
+      "val_f1": 0.8991,
+      "accuracy": 0.8611,
+      "correct": 31,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Peron's Tree Frog",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win_sec=0.3",
+      "params": {
+        "win_sec": 0.3
+      },
+      "val_f1": 0.909,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Eastern Dwarf Tree Frog",
+        "Littlejohns Tree Frog",
+        "Eastern Sign-bearing Froglet",
+        "Eastern Banjo Frog",
+        "Common Spadefoot Toad",
+        "Red-groined Froglet",
+        "Martins Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog",
+        "Barking Marsh Frog"
+      ]
+    },
+    {
+      "label": "win_sec=0.7",
+      "params": {
+        "win_sec": 0.7
+      },
+      "val_f1": 0.9099,
+      "accuracy": 0.8333,
+      "correct": 30,
+      "total": 36,
+      "failing": [
+        "Mallee Spadefoot Toad",
+        "Red-groined Froglet",
+        "Baw Baw Frog",
+        "Martins Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog"
+      ]
+    },
+    {
+      "label": "win_sec=1.0",
+      "params": {
+        "win_sec": 1.0
+      },
+      "val_f1": 0.9035,
+      "accuracy": 0.8333,
+      "correct": 30,
+      "total": 36,
+      "failing": [
+        "Peron's Tree Frog",
+        "Littlejohns Tree Frog",
+        "Southern Barred Frog",
+        "Red-groined Froglet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_mfcc=13",
+      "params": {
+        "n_mfcc": 13
+      },
+      "val_f1": 0.9017,
+      "accuracy": 0.8333,
+      "correct": 30,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Striped Marsh Frog",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_mfcc=30",
+      "params": {
+        "n_mfcc": 30
+      },
+      "val_f1": 0.8994,
+      "accuracy": 0.9167,
+      "correct": 33,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Martins Toadlet",
+        "Tylers Toadlet"
+      ]
+    },
+    {
+      "label": "n_mfcc=40",
+      "params": {
+        "n_mfcc": 40
+      },
+      "val_f1": 0.8672,
+      "accuracy": 0.8056,
+      "correct": 29,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Peron's Tree Frog",
+        "Littlejohns Tree Frog",
+        "Common Spadefoot Toad",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Barking Marsh Frog"
+      ]
+    },
+    {
+      "label": "n_fft=1024",
+      "params": {
+        "n_fft": 1024
+      },
+      "val_f1": 0.9029,
+      "accuracy": 0.8611,
+      "correct": 31,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Giant Burrowing Frog",
+        "Red-groined Froglet",
+        "Martins Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_fft=4096",
+      "params": {
+        "n_fft": 4096
+      },
+      "val_f1": 0.9194,
+      "accuracy": 0.7778,
+      "correct": 28,
+      "total": 36,
+      "failing": [
+        "Southern Smooth Froglet",
+        "Giant Burrowing Frog",
+        "Common Spadefoot Toad",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "hop=256",
+      "params": {
+        "hop_length": 256
+      },
+      "val_f1": 0.9009,
+      "accuracy": 0.8889,
+      "correct": 32,
+      "total": 36,
+      "failing": [
+        "Red-groined Froglet",
+        "Martins Toadlet",
+        "Tylers Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "hop=1024",
+      "params": {
+        "hop_length": 1024
+      },
+      "val_f1": 0.9133,
+      "accuracy": 0.75,
+      "correct": 27,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Peron's Tree Frog",
+        "Eastern Sign-bearing Froglet",
+        "Mallee Spadefoot Toad",
+        "Red-groined Froglet",
+        "Martins Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "noise=0.0",
+      "params": {
+        "aug_noise_lvl": 0.0
+      },
+      "val_f1": 0.9552,
+      "accuracy": 0.8056,
+      "correct": 29,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Littlejohns Tree Frog",
+        "Victorian Frog",
+        "Baw Baw Frog",
+        "Martins Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog"
+      ]
+    },
+    {
+      "label": "noise=0.1",
+      "params": {
+        "aug_noise_lvl": 0.1
+      },
+      "val_f1": 0.9569,
+      "accuracy": 0.8056,
+      "correct": 29,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Victorian Frog",
+        "Red-groined Froglet",
+        "Martins Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "noise=0.5",
+      "params": {
+        "aug_noise_lvl": 0.5
+      },
+      "val_f1": 0.8814,
+      "accuracy": 0.8611,
+      "correct": 31,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Leaf Green Tree Frog",
+        "Southern Smooth Froglet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog"
+      ]
+    }
+  ]
+}

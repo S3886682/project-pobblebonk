@@ -26,8 +26,8 @@ from features import extract_features
 
 warnings.filterwarnings("ignore")
 
-TESTING_DIR = "Testing Audio"
-MODEL_DIR   = "models"
+TESTING_DIR = os.path.join("datasets", "updated", "Testing Audio")
+MODEL_DIR   = os.path.join("models", "latest")
 REPORTS_DIR = "reports"
 
 WIN_SAMPLES  = int(WIN_SEC * SAMPLE_RATE)
@@ -60,7 +60,7 @@ def main():
         return
 
     pipeline   = joblib.load(model_path)
-    test_files = sorted(f for f in os.listdir(TESTING_DIR) if f.lower().endswith(".mp3"))
+    test_files = sorted(f for f in os.listdir(TESTING_DIR) if f.lower().endswith((".mp3", ".wav")))
 
     results, correct = [], 0
     W = (42, 32, 32)
@@ -70,7 +70,7 @@ def main():
     for fname in test_files:
         truth            = re.sub(r"^\d+\s*", "", os.path.splitext(fname)[0]).strip()
         predicted, conf  = predict_file(pipeline, os.path.join(TESTING_DIR, fname))
-        is_correct       = truth.lower() == predicted.lower()
+        is_correct       = truth.lower().replace("'", "") == predicted.lower().replace("'", "")
         correct         += int(is_correct)
         print(f"{fname:<{W[0]}} {truth:<{W[1]}} {predicted:<{W[2]}} {conf:>5.1%}  {'PASS' if is_correct else 'FAIL'}")
         results.append({"file": fname, "truth": truth, "predicted": predicted,

@@ -16,7 +16,7 @@ from config import AUG_NOISE_LVL, HOP_LENGTH, N_FFT, N_MFCC, SAMPLE_RATE, WIN_SE
 
 warnings.filterwarnings("ignore")
 
-TRAINING_DIR   = "Training Audio"
+TRAINING_DIR   = os.path.join("datasets", "updated", "Training Audio")
 BACKGROUND_DIR = "Background Audio"
 
 WIN_SAMPLES = int(SAMPLE_RATE * WIN_SEC)
@@ -69,12 +69,16 @@ def augment_noise(y, background_files):
 
 def build_dataset(**kwargs):
     """Load all training WAVs with 4x augmentation. Accepts optional overrides
-    for n_mfcc, n_fft, hop_length, sr, win_sec to support tune.py."""
-    sr       = kwargs.get("sr",         SAMPLE_RATE)
-    win_sec  = kwargs.get("win_sec",    WIN_SEC)
-    n_mfcc   = kwargs.get("n_mfcc",     N_MFCC)
-    n_fft    = kwargs.get("n_fft",      N_FFT)
-    hop_len  = kwargs.get("hop_length", HOP_LENGTH)
+    for n_mfcc, n_fft, hop_length, sr, win_sec, aug_noise_lvl to support sweep.py."""
+    sr             = kwargs.get("sr",            SAMPLE_RATE)
+    win_sec        = kwargs.get("win_sec",        WIN_SEC)
+    n_mfcc         = kwargs.get("n_mfcc",         N_MFCC)
+    n_fft          = kwargs.get("n_fft",          N_FFT)
+    hop_len        = kwargs.get("hop_length",     HOP_LENGTH)
+    aug_noise_lvl  = kwargs.get("aug_noise_lvl",  AUG_NOISE_LVL)
+
+    np.random.seed(42)
+    random.seed(42)
 
     background_files = []
     if os.path.isdir(BACKGROUND_DIR):
@@ -89,13 +93,14 @@ def build_dataset(**kwargs):
         if not os.path.isdir(spath):
             continue
         for fname in os.listdir(spath):
-            if not fname.lower().endswith(".wav"):
+            if not fname.lower().endswith((".wav", ".mp3")):
                 continue
             try:
                 seg = load_segment(os.path.join(spath, fname), sr=sr, win_sec=win_sec)
             except Exception:
                 continue
-            for aug in [seg, augment_time(seg), augment_pitch(seg, sr), augment_noise(seg, background_files)]:
+            noise_aug = seg + aug_noise_lvl * load_segment(random.choice(background_files), sr=sr, win_sec=win_sec) if background_files else seg
+            for aug in [seg, augment_time(seg), augment_pitch(seg, sr), noise_aug]:
                 X.append(extract_features(aug, n_mfcc=n_mfcc, n_fft=n_fft, hop_length=hop_len, sr=sr))
                 y.append(species)
 
