@@ -5,7 +5,12 @@
       "PowerShell($basePath = \"c:\\\\Users\\\\ashle\\\\OneDrive\\\\Documents\\\\Repos\\\\project-pobblebonk\\\\ModelTraining\\\\datasets\"; Write-Host \"===== BASELINE TESTING AUDIO =====\"; \\(Get-ChildItem -Path \"$basePath\\\\baseline\\\\Testing Audio\" -File\\)[0..5] | ForEach-Object { $_.Name }; Write-Host \"`n===== UPDATED TESTING AUDIO =====\"; \\(Get-ChildItem -Path \"$basePath\\\\updated\\\\Testing Audio\" -File\\)[0..5] | ForEach-Object { $_.Name })",
       "PowerShell($basePath = \"c:\\\\Users\\\\ashle\\\\OneDrive\\\\Documents\\\\Repos\\\\project-pobblebonk\\\\ModelTraining\\\\datasets\\\\updated\"; Write-Host \"STRUCTURE OF UPDATED DATASET:\"; Get-ChildItem -Path $basePath | ForEach-Object { Write-Host \"`n=== $\\($_.Name\\) ===\"; if \\($_.PSIsContainer\\) { Get-ChildItem -Path $_.FullName -Directory | ForEach-Object { Write-Host \"  [DIR] $\\($_.Name\\)\" } } else { Write-Host \"  [FILE] $\\($_.Name\\)\" } })",
       "PowerShell($basePath = \"c:\\\\Users\\\\ashle\\\\OneDrive\\\\Documents\\\\Repos\\\\project-pobblebonk\\\\ModelTraining\\\\datasets\\\\updated\\\\Training Audio\"; Write-Host \"SAMPLE FILES FROM UPDATED TRAINING AUDIO:\"; Get-ChildItem -Path \"$basePath\\\\Spotted Marsh Frog\" -File | ForEach-Object { $_.Name }; Write-Host \"`nFrom Eastern Banjo Frog:\"; \\(Get-ChildItem -Path \"$basePath\\\\Eastern Banjo Frog\" -File\\)[0..3] | ForEach-Object { $_.Name }; Write-Host \"`nFrom Baw Baw Frog:\"; \\(Get-ChildItem -Path \"$basePath\\\\Baw Baw Frog\" -File\\)[0..3] | ForEach-Object { $_.Name })",
-      "PowerShell(python -c \"import requests; import pydub; print\\('OK'\\)\" 2>&1)"
+      "PowerShell(python -c \"import requests; import pydub; print\\('OK'\\)\" 2>&1)",
+      "Bash(python fetch_frog_images.py)",
+      "WebFetch(domain:www.frogid.net.au)",
+      "Bash(ffmpeg -version)",
+      "Bash(python -c \"from pydub import AudioSegment; print\\('pydub ok'\\)\")",
+      "WebFetch(domain:api.inaturalist.org)"
     ]
   }
 }
