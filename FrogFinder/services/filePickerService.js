@@ -1,11 +1,22 @@
 import * as DocumentPicker from 'expo-document-picker';
 
 class FilePickerService {
-    async pickAudioFile() {
-        // TODO: Implement actual file picking logic using expo-document-picker
-        // TODO: Validate that the picked file is an audio file, convert to correct format if necessary, and return file URI
-        console.log('[STUB] File picker called');
-        return 'dummy-uploaded-audio-uri';
-    }
+  async pickAudioFile() {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: ['audio/*'],
+      copyToCacheDirectory: true,
+    });
+
+    if (result.canceled) return null;
+
+    const file = result.assets[0];
+
+    return {
+      uri: file.uri,
+      fileName: file.name,
+      mimeType: file.mimeType,
+    };
+  }
 }
+
 export const filePickerService = new FilePickerService();
