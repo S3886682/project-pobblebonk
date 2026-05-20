@@ -1,277 +1,254 @@
 [
   {
-    "name": "Booroolong Frog",
-    "scientific_name": "Litoria booroolongensis",
-    "description": "Medium-sized frog found along rocky permanent streams in NSW and Victoria"
-  },
-  {
-    "name": "Cave Frog",
-    "scientific_name": "Litoria cavernicola",
-    "description": "Small frog that inhabits caves and rocky outcrops in Queensland"
-  },
-  {
-    "name": "Common Eastern Froglet",
-    "scientific_name": "Crinia signifera",
-    "description": "Tiny brown frog with variable patterns commonly found in eastern Australia"
-  },
-  {
-    "name": "Davies Tree Frog",
-    "scientific_name": "Litoria daviesae",
-    "description": "Green tree frog found in rainforests of northeast Queensland"
-  },
-  {
-    "name": "Desert Spadefoot",
-    "scientific_name": "Notaden nichollsi",
-    "description": "Burrowing frog adapted to arid environments with specialized digging feet"
-  },
-  {
-    "name": "Eastern Banjo Frog",
-    "scientific_name": "Limnodynastes dumerilii",
-    "description": "Also known as Pobblebonk for its distinctive call similar to a banjo string being plucked"
-  },
-  {
-    "name": "Eungella Day Frog",
-    "scientific_name": "Taudactylus eungellensis",
-    "description": "Stream-dwelling frog found in the Eungella region of Queensland"
-  },
-  {
-    "name": "Flat Headed Frog",
-    "scientific_name": "Limnodynastes depressus",
-    "description": "Distinctive frog with unusually flat head adapted for living in narrow crevices"
-  },
-  {
-    "name": "Fleay's Barred Frog",
-    "scientific_name": "Mixophyes fleayi",
-    "description": "Large frog with distinctive barred pattern on its limbs"
-  },
-  {
-    "name": "Giant Barred Frog",
-    "scientific_name": "Mixophyes iteratus",
-    "description": "One of Australia's largest frogs with distinctive dark bars on limbs"
-  },
-  {
-    "name": "Giant Burrowing Frog",
-    "scientific_name": "Heleioporus australiacus",
-    "description": "Large frog that spends most of its time in underground burrows"
-  },
-  {
+    "id": "1",
     "name": "Green and Golden Bell Frog",
     "scientific_name": "Litoria aurea",
-    "description": "Bright green frog with gold patterns and distinctive gold iris"
+    "description": "Bright green frog with gold patterns and distinctive gold iris",
+    "image": "green_and_golden_bell_frog.png"
   },
   {
-    "name": "Green Tree Frog",
-    "scientific_name": "Litoria caerulea",
-    "description": "Large bright green frog often found around houses and water tanks"
+    "id": "2",
+    "name": "Booroolong Frog",
+    "scientific_name": "Litoria booroolongensis",
+    "description": "Medium-sized frog found along rocky permanent streams in NSW and Victoria",
+    "image": "booroolong_frog.png"
   },
   {
-    "name": "Hosmer's Nursery Frog",
-    "scientific_name": "Cophixalus hosmeri",
-    "description": "Small frog that cares for its eggs in moist leaf litter"
+    "id": "3",
+    "name": "Blue Mountains Tree Frog",
+    "scientific_name": "Litoria citropa",
+    "description": "Medium tree frog with blue and orange markings on its inner thighs, found in rocky mountain streams",
+    "image": "blue_mountains_tree_frog.png"
   },
   {
-    "name": "Howard Springs Toadlet",
-    "scientific_name": "Uperoleia daviesae",
-    "description": "Small ground-dwelling frog from the Northern Territory"
+    "id": "4",
+    "name": "Southern Brown Tree Frog",
+    "scientific_name": "Litoria ewingi",
+    "description": "Small brown tree frog common in southeastern Australia, found in a wide range of habitats from forests to suburban gardens",
+    "image": "southern_brown_tree_frog.png"
   },
   {
-    "name": "Kroombit Tops Tinker Frog",
-    "scientific_name": "Taudactylus pleione",
-    "description": "Endangered frog found only in Kroombit Tops National Park"
+    "id": "5",
+    "name": "Eastern Dwarf Tree Frog",
+    "scientific_name": "Litoria fallax",
+    "description": "Very small bright green tree frog found near reeds and sedges along the eastern coast of Australia",
+    "image": "eastern_dwarf_tree_frog.png"
   },
   {
-    "name": "Kuranda Tree Frog",
-    "scientific_name": "Ranoidea myola",
-    "description": "Vibrant green tree frog found in the Kuranda region of Queensland"
+    "id": "6",
+    "name": "Lesueurs Tree Frog",
+    "scientific_name": "Litoria lesueuri",
+    "description": "Slender, mottled brown tree frog associated with rocky streams and boulders in southeastern Australia",
+    "image": "lesueurs_tree_frog.png"
   },
   {
-    "name": "Littlejohn's Toadlet",
-    "scientific_name": "Cophixalus littlejohni",
-    "description": "Small secretive frog with warty skin and restricted distribution"
+    "id": "7",
+    "name": "Littlejohns Tree Frog",
+    "scientific_name": "Litoria littlejohni",
+    "description": "Large robust tree frog restricted to upland areas of the Great Dividing Range in NSW and Victoria",
+    "image": "littlejohns_tree_frog.png"
   },
   {
-    "name": "Magnificent Brood Frog",
-    "scientific_name": "Pseudophryne covacevichae",
-    "description": "Frog that guards its eggs until they hatch into froglets"
+    "id": "8",
+    "name": "Leaf Green Tree Frog",
+    "scientific_name": "Litoria nudidigita",
+    "description": "Small bright green tree frog with reduced toe pads found along streams in southeastern Australia",
+    "image": "leaf_green_tree_frog.png"
   },
   {
-    "name": "Magnificent Tree Frog",
-    "scientific_name": "Litoria splendida",
-    "description": "Large green tree frog with prominent white spots"
+    "id": "9",
+    "name": "Victorian Frog",
+    "scientific_name": "Litoria paraewingi",
+    "description": "Small brown tree frog closely related to the Southern Brown Tree Frog, largely restricted to Victoria and southern NSW",
+    "image": "victorian_frog.png"
   },
   {
-    "name": "Mahony's Toadlet",
-    "scientific_name": "Uperoleia mahonyi",
-    "description": "Recently discovered toadlet with distinctive marbled black and white belly"
+    "id": "10",
+    "name": "Perons Tree Frog",
+    "scientific_name": "Litoria peroni",
+    "description": "Distinctive tree frog with bright yellow and black flash markings on its groin and thighs, known for its maniacal cackling call",
+    "image": "perons_tree_frog.png"
   },
   {
-    "name": "Moss Froglet",
-    "scientific_name": "Crinia nimbus",
-    "description": "Tiny frog that lives among moss in alpine and subalpine areas"
-  },
-  {
-    "name": "Motorbike Frog",
-    "scientific_name": "Litoria moorei",
-    "description": "Named for its call which sounds like a motorbike changing gears"
-  },
-  {
-    "name": "Mount Top Nursery Frog",
-    "scientific_name": "Cophixalus monticola",
-    "description": "Small frog that lives high in mountains of Far North Queensland"
-  },
-  {
-    "name": "Mountain Frog",
-    "scientific_name": "Philoria kundagungan",
-    "description": "Frog adapted to high elevation habitats in eastern Australia"
-  },
-  {
-    "name": "Mountain Mist Frog",
-    "scientific_name": "Litoria nyakalensis",
-    "description": "Frog that lives in misty mountain streams and waterfalls"
-  },
-  {
-    "name": "Mt Elliot Nursery Frog",
-    "scientific_name": "Cophixalus mcdonaldi",
-    "description": "Small frog endemic to Mount Elliot in North Queensland"
-  },
-  {
-    "name": "Northern Corroboree Frog",
-    "scientific_name": "Pseudophryne pengilleyi",
-    "description": "Small black and yellow striped frog endangered due to chytrid fungus"
-  },
-  {
-    "name": "Northern Flinders Ranges Froglet",
-    "scientific_name": "Crinia flindersensis",
-    "description": "Small frog endemic to the northern Flinders Ranges in South Australia"
-  },
-  {
-    "name": "Northern Heath Frog",
-    "scientific_name": "Litoria watsoni",
-    "description": "Frog that inhabits heathland in northern Australia"
-  },
-  {
-    "name": "Northern Snapping Frog",
-    "scientific_name": "Cyclorana novaehollandiae",
-    "description": "Large frog that makes a loud snapping sound when calling"
-  },
-  {
-    "name": "Northern Tinker Frog",
-    "scientific_name": "Taudactylus rheophilus",
-    "description": "Small frog with a call that sounds like a tinker working with metal"
-  },
-  {
-    "name": "Orange-bellied Froglet",
-    "scientific_name": "Crinia tinnula",
-    "description": "Small frog with distinctive orange coloration on its belly"
-  },
-  {
-    "name": "Pobblebonk",
-    "scientific_name": "Limnodynastes dumerilii",
-    "description": "Round burrowing frog known for its \"bonk\" call like a banjo string"
-  },
-  {
-    "name": "Rattling Nursery Frog",
-    "scientific_name": "Cophixalus crepitans",
-    "description": "Small frog with a call that sounds like rattling or clicking"
-  },
-  {
-    "name": "Richmond Mountain Frog",
-    "scientific_name": "Philoria richmondensis",
-    "description": "Rare frog found in the mountains of northeastern NSW"
-  },
-  {
-    "name": "Sloane's Froglet",
-    "scientific_name": "Crinia sloanei",
-    "description": "Tiny frog with a short, sharp call found in inland NSW"
-  },
-  {
-    "name": "Southern Barred Frog",
-    "scientific_name": "Mixophyes balbus",
-    "description": "Large frog with distinctive barred pattern on limbs"
-  },
-  {
-    "name": "Southern Bell Frog",
+    "id": "11",
+    "name": "Growling Grass Frog",
     "scientific_name": "Litoria raniformis",
-    "description": "Bright green frog with golden stripes and black spotting"
+    "description": "Large, vivid green and gold frog with a deep growling call, found in wetlands and slow-moving water across southeastern Australia",
+    "image": "growling_grass_frog.png"
   },
   {
-    "name": "Southern Corroboree Frog",
-    "scientific_name": "Pseudophryne corroboree",
-    "description": "Critically endangered black and yellow striped frog"
-  },
-  {
-    "name": "Southern Heath Frog",
-    "scientific_name": "Litoria verreauxii",
-    "description": "Frog adapted to heathland environments in southern Australia"
-  },
-  {
+    "id": "12",
     "name": "Spotted Tree Frog",
     "scientific_name": "Litoria spenceri",
-    "description": "Tree frog with distinctive spotted pattern"
+    "description": "Tree frog with distinctive spotted pattern",
+    "image": "spotted_tree_frog.png"
   },
   {
-    "name": "Striped Marsh Frog",
-    "scientific_name": "Limnodynastes peronii",
-    "description": "Common frog with distinctive stripes running down its back"
+    "id": "13",
+    "name": "Verreauxs Tree Frog",
+    "scientific_name": "Litoria verreauxi",
+    "description": "Small slender tree frog with a high-pitched whistling call, found in heathlands and open woodlands of southeastern Australia",
+    "image": "verreauxs_tree_frog.png"
   },
   {
-    "name": "Sunset Frog",
-    "scientific_name": "Spicospina flammocaerulea",
-    "description": "Frog with unique reddish-brown coloration resembling a sunset"
+    "id": "14",
+    "name": "Eastern Sign-bearing Froglet",
+    "scientific_name": "Crinia parinsignifera",
+    "description": "Tiny ground-dwelling froglet with variable belly markings, common in moist grasslands and wetland margins of southeastern Australia",
+    "image": "eastern_sign_bearing_froglet.png"
   },
   {
-    "name": "Tapping Nursery Frog",
-    "scientific_name": "Cophixalus aenigma",
-    "description": "Small frog with a tapping call that cares for its eggs"
+    "id": "15",
+    "name": "Comman Eastern Froglet",
+    "scientific_name": "Crinia signifera",
+    "description": "Tiny brown frog with variable patterns commonly found in eastern Australia",
+    "image": "common_eastern_froglet.png"
   },
   {
-    "name": "Tasmanian Tree Frog",
-    "scientific_name": "Litoria burrowsae",
-    "description": "Tree frog endemic to Tasmania with variable coloration"
+    "id": "16",
+    "name": "Sloanes Froglet",
+    "scientific_name": "Crinia sloanei",
+    "description": "Tiny frog with a short, sharp call found in inland NSW",
+    "image": "sloanes_froglet.png"
   },
   {
-    "name": "Tusked Frog",
-    "scientific_name": "Adelotus brevis",
-    "description": "Male has tusk-like projections used during breeding competition"
+    "id": "17",
+    "name": "Southern Smooth Froglet",
+    "scientific_name": "Geocrinia laevis",
+    "description": "Small, smooth-skinned froglet found in wet forest leaf litter and moist gullies of southwestern Victoria and southeastern South Australia",
+    "image": "southern_smooth_froglet.png"
   },
   {
+    "id": "18",
     "name": "Victorian Smooth Froglet",
     "scientific_name": "Geocrinia victoriana",
-    "description": "Small smooth-skinned frog found in Victoria"
+    "description": "Small smooth-skinned frog found in Victoria",
+    "image": "victorian_smooth_froglet.png"
   },
   {
-    "name": "Wallum Sedge Frog",
-    "scientific_name": "Litoria olongburensis",
-    "description": "Acid-tolerant frog that lives in wallum heath environments"
+    "id": "19",
+    "name": "Giant Burrowing Frog",
+    "scientific_name": "Heleioporus australiacus",
+    "description": "Large frog that spends most of its time in underground burrows",
+    "image": "giant_burrowing_frog.png"
   },
   {
-    "name": "White Bellied Frog",
-    "scientific_name": "Geocrinia alba",
-    "description": "Small frog with distinctive white belly found only in southwest WA"
+    "id": "20",
+    "name": "Eastern Banjo Frog",
+    "scientific_name": "Limnodynastes dumerili",
+    "description": "Also known as Pobblebonk for its distinctive call similar to a banjo string being plucked",
+    "image": "eastern_banjo_frog.png"
   },
   {
-    "name": "Yellow Spotted Bell Frog",
-    "scientific_name": "Litoria castanea",
-    "description": "Large green frog with yellow spots thought extinct until rediscovered"
+    "id": "21",
+    "name": "Barking Marsh Frog",
+    "scientific_name": "Limnodynastes fletcheri",
+    "description": "Medium-sized frog with a loud, repeated barking call found in inland marshes and floodplains of southeastern Australia",
+    "image": "barking_marsh_frog.png"
   },
   {
-    "name": "Australian Lace-Lid",
-    "scientific_name": "Litoria dayi",
-    "description": "Frog with partially webbed eyelids that resemble lace"
+    "id": "22",
+    "name": "Giant Banjo Frog",
+    "scientific_name": "Limnodynastes interioris",
+    "description": "Large burrowing frog with a deep banjo-like call found in the inland floodplains and clay soils of southeastern Australia",
+    "image": "giant_banjo_frog.png"
   },
   {
+    "id": "23",
+    "name": "Striped Marsh Frog",
+    "scientific_name": "Limnodynastes peroni",
+    "description": "Common frog with distinctive stripes running down its back",
+    "image": "striped_marsh_frog.png"
+  },
+  {
+    "id": "24",
+    "name": "Spotted Marsh Frog",
+    "scientific_name": "Limnodynastes tasmaniensis",
+    "description": "Common, heavily spotted marsh frog with a rapid tapping call found across southeastern Australia in a wide variety of wetland habitats",
+    "image": "spotted_marsh_frog.png"
+  },
+  {
+    "id": "25",
+    "name": "Southern Barred Frog",
+    "scientific_name": "Mixophyes balbus",
+    "description": "Large frog with distinctive barred pattern on limbs",
+    "image": "southern_barred_frog.png"
+  },
+  {
+    "id": "26",
+    "name": "Mallee Spadefoot Toad",
+    "scientific_name": "Neobatrachus pictus",
+    "description": "Stout burrowing frog with a spotted pattern found in the semi-arid mallee scrublands of Victoria and South Australia",
+    "image": "mallee_spadefoot_toad.png"
+  },
+  {
+    "id": "27",
+    "name": "Common Spadefoot Toad",
+    "scientific_name": "Neobatrachus sudelli",
+    "description": "Robust burrowing frog with a spade-like hind foot tubercle used for digging, emerging to breed after heavy inland rains",
+    "image": "common_spadefoot_toad.png"
+  },
+  {
+    "id": "28",
+    "name": "Red-groined Froglet",
+    "scientific_name": "Paracrinia haswelli",
+    "description": "Small froglet with distinctive red or orange coloration on its groin, found in coastal heathlands and wetlands of southeastern Victoria",
+    "image": "red_groined_froglet.png"
+  },
+  {
+    "id": "29",
     "name": "Baw Baw Frog",
     "scientific_name": "Philoria frosti",
-    "description": "Critically endangered frog found only on the Baw Baw Plateau in Victoria"
+    "description": "Critically endangered frog found only on the Baw Baw Plateau in Victoria",
+    "image": "baw_baw_frog.png"
   },
   {
-    "name": "Beautiful Nursery Frog",
-    "scientific_name": "Cophixalus concinnus",
-    "description": "Colorful small frog that provides parental care to its eggs"
+    "id": "30",
+    "name": "Bibrons Toadlet",
+    "scientific_name": "Pseudophryne bibroni",
+    "description": "Small, warty toadlet with a mottled brown pattern, found in woodlands and grasslands of southeastern Australia",
+    "image": "bibrons_toadlet.png"
   },
   {
-    "name": "Bellenden Ker Nursery Frog",
-    "scientific_name": "Cophixalus neglectus",
-    "description": "Small frog endemic to the Bellenden Ker Range in Queensland"
+    "id": "31",
+    "name": "Dendys Toadlet",
+    "scientific_name": "Pseudophryne dendyi",
+    "description": "Small toadlet with a distinctive black and orange belly, found in moist forest gullies of Victoria and southern NSW",
+    "image": "dendys_toadlet.png"
+  },
+  {
+    "id": "32",
+    "name": "Southern Toadlet",
+    "scientific_name": "Pseudophryne semimarmorata",
+    "description": "Small toadlet with a marbled black and white or orange belly found in heathlands and woodlands of Victoria and South Australia",
+    "image": "southern_toadlet.png"
+  },
+  {
+    "id": "33",
+    "name": "Smooth Toadlet",
+    "scientific_name": "Uperoleia laevigata",
+    "description": "Small, smooth-skinned toadlet found in southeastern Australia, typically in grasslands and grassy woodlands near ephemeral wetlands",
+    "image": "smooth_toadlet.png"
+  },
+  {
+    "id": "34",
+    "name": "Martins Toadlet",
+    "scientific_name": "Uperoleia martini",
+    "description": "Small ground-dwelling toadlet with cryptic brown patterning found in southeastern Australia",
+    "image": "martins_toadlet.png"
+  },
+  {
+    "id": "35",
+    "name": "Wrinkled Toadlet",
+    "scientific_name": "Uperoleia rugosa",
+    "description": "Small toadlet with noticeably rugose or wrinkled skin found in coastal and near-coastal habitats of southeastern Australia",
+    "image": "wrinkled_toadlet.png"
+  },
+  {
+    "id": "36",
+    "name": "Tylers Toadlet",
+    "scientific_name": "Uperoleia tyleri",
+    "description": "Small toadlet distinguished by its orange axillary and groin patches, found in southeastern Australia",
+    "image": "tylers_toadlet.png"
   }
 ]
