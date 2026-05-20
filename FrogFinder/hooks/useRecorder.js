@@ -8,12 +8,14 @@ export const useRecorder = () => {
   const startRecording = useCallback(async () => {
     try {
       setRecordingError(null);
-      await micRecorderService.startRecording(() => setIsRecording(false));
       setIsRecording(true);
+      await micRecorderService.startRecording(() => setIsRecording(false));
     } catch (error) {
       console.error('[useRecorder] startRecording failed:', error);
       setRecordingError(error.message);
+      return false;
     }
+    return true;
   }, []);
 
   const stopRecording = useCallback(async () => {
@@ -21,9 +23,8 @@ export const useRecorder = () => {
       setRecordingError(null);
       const uri = await micRecorderService.stopRecording();
       setIsRecording(false);
-      return uri;
+      return { uri, fileName: 'recording.m4a', mimeType: 'audio/m4a' };   // wrap uri
     } catch (error) {
-
       console.error('[useRecorder] stopRecording failed:', error);
       setRecordingError(error.message);
     }
