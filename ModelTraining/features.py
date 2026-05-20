@@ -92,7 +92,7 @@ def build_dataset(**kwargs):
         spath = os.path.join(TRAINING_DIR, species)
         if not os.path.isdir(spath):
             continue
-        for fname in os.listdir(spath):
+        for fname in sorted(os.listdir(spath)):
             if not fname.lower().endswith((".wav", ".mp3")):
                 continue
             try:

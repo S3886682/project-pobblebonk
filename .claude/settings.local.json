@@ -19,7 +19,26 @@
       "Read(//c/Users/ashle/.claude/projects/**)",
       "Bash(python3 -)",
       "Bash(python3 -c ' *)",
-      "Bash(python sweep.py)"
+      "Bash(python sweep.py)",
+      "Bash(python scrape_audio_files/download_xeno_canto.py --api-key d761911b5c8691d0e0d408e51abed5acfd4f06b5 --species \"Giant Banjo Frog\" --quality A B C)",
+      "WebFetch(domain:wildambience.com)",
+      "WebFetch(domain:amphibiaweb.org)",
+      "WebFetch(domain:bioacoustica.org)",
+      "WebFetch(domain:www.gbif.org)",
+      "WebFetch(domain:frogs.org.au)",
+      "WebFetch(domain:biocache.ala.org.au)",
+      "WebFetch(domain:collection.soundandvision.com.au)",
+      "WebFetch(domain:collections.museumsvictoria.com.au)",
+      "WebFetch(domain:www.anbg.gov.au)",
+      "WebFetch(domain:www.frogs.org.au)",
+      "WebFetch(domain:biodiversity.org.au)",
+      "WebFetch(domain:australian.museum)",
+      "WebFetch(domain:swifft.net.au)",
+      "WebFetch(domain:www.environment.vic.gov.au)",
+      "Bash(python scrape_audio_files/download_inaturalist_audio.py --species \"Littlejohns Tree Frog\")",
+      "Bash(python -)",
+      "Bash(python train.py)",
+      "Bash(python evaluate.py)"
     ]
   }
 }

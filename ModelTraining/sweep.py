@@ -59,14 +59,14 @@ SINGLES = [
 ]
 
 # ── Combo experiments (--combo / --quick flag) ────────────────────────────────
-# Informed by sweep results: n_mfcc=30 (91.7%) and hop=256 (88.9%) were top singles.
+# Informed by sweep results: win_sec=1.0 (94.4%) and n_fft=1024 (88.9%) were top singles.
 COMBOS = [
-    ("mfcc30+hop256",            dict(n_mfcc=30, hop_length=256)),
-    ("mfcc30+noise0.5",          dict(n_mfcc=30, aug_noise_lvl=0.5)),
-    ("mfcc30+fft1024",           dict(n_mfcc=30, n_fft=1024)),
-    ("mfcc30+hop256+noise0.5",   dict(n_mfcc=30, hop_length=256, aug_noise_lvl=0.5)),
-    ("mfcc30+hop256+fft1024",    dict(n_mfcc=30, hop_length=256, n_fft=1024)),
-    ("hop256+noise0.5",          dict(hop_length=256, aug_noise_lvl=0.5)),
+    ("win1.0+fft1024",           dict(win_sec=1.0, n_fft=1024)),
+    ("win1.0+mfcc30",            dict(win_sec=1.0, n_mfcc=30)),
+    ("win1.0+hop256",            dict(win_sec=1.0, hop_length=256)),
+    ("win1.0+mfcc30+fft1024",    dict(win_sec=1.0, n_mfcc=30, n_fft=1024)),
+    ("win1.0+fft1024+hop256",    dict(win_sec=1.0, n_fft=1024, hop_length=256)),
+    ("win1.0+noise0.1",          dict(win_sec=1.0, aug_noise_lvl=0.1)),
 ]
 
 # ── SVM grid experiments (--svm flag) ─────────────────────────────────────────

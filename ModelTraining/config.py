@@ -13,10 +13,10 @@
 
 # --- Audio processing ---
 SAMPLE_RATE = 32000    # SR
-WIN_SEC     = 0.5      # seconds per training window (tuned: was 0.3)
-N_MFCC      = 30       # MFCC coefficients (tuned: sweep found 30 >> 20 >> 40)
+WIN_SEC     = 1.0      # seconds per training window (tuned: sweep found 1.0 >> 0.5 >> 0.3)
+N_MFCC      = 20       # MFCC coefficients (tuned: 20 best with win_sec=1.0)
 N_FFT       = 2048     # n_fft / window size
-HOP_LENGTH  = 512      # hop length
+HOP_LENGTH  = 256      # hop length (tuned: sweep found 256 best with win_sec=1.0)
 
 # --- Augmentation ---
 AUG_NOISE_LVL = 0.3    # background noise mix ratio (0 = off)
@@ -24,4 +24,3 @@ AUG_NOISE_LVL = 0.3    # background noise mix ratio (0 = off)
 # --- Training ---
 SVM_C     = 10         # used as default; GridSearchCV will override
 SVM_GAMMA = "scale"    # used as default; GridSearchCV will override
-TEST_SPLIT = 0.2

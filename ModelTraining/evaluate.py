@@ -36,6 +36,8 @@ STEP_SAMPLES = int(WIN_SAMPLES * 0.67)
 
 def predict_file(pipeline, path):
     y, _ = librosa.load(path, sr=SAMPLE_RATE, mono=True)
+    if len(y) < WIN_SAMPLES:
+        y = np.pad(y, (0, WIN_SAMPLES - len(y)))
     preds, confs = [], []
     for start in range(0, len(y) - WIN_SAMPLES + 1, STEP_SAMPLES):
         feat  = extract_features(y[start:start + WIN_SAMPLES]).reshape(1, -1)

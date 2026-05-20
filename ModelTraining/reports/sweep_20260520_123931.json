@@ -1,0 +1,112 @@
+{
+  "timestamp": "2026-05-20T12:39:31.276328",
+  "baseline": {
+    "sr": 32000,
+    "win_sec": 0.5,
+    "n_mfcc": 20,
+    "n_fft": 2048,
+    "hop_length": 512,
+    "aug_noise_lvl": 0.3
+  },
+  "runs": [
+    {
+      "label": "win1.0+fft1024",
+      "params": {
+        "win_sec": 1.0,
+        "n_fft": 1024
+      },
+      "val_f1": 0.9159,
+      "accuracy": 0.9167,
+      "correct": 33,
+      "total": 36,
+      "failing": [
+        "Southern Barred Frog",
+        "Wrinkled Toadlet",
+        "Tylers Toadlet"
+      ]
+    },
+    {
+      "label": "win1.0+mfcc30",
+      "params": {
+        "win_sec": 1.0,
+        "n_mfcc": 30
+      },
+      "val_f1": 0.9125,
+      "accuracy": 0.8611,
+      "correct": 31,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Peron's Tree Frog",
+        "Southern Barred Frog",
+        "Red-groined Froglet",
+        "Tylers Toadlet"
+      ]
+    },
+    {
+      "label": "win1.0+hop256",
+      "params": {
+        "win_sec": 1.0,
+        "hop_length": 256
+      },
+      "val_f1": 0.9152,
+      "accuracy": 0.9444,
+      "correct": 34,
+      "total": 36,
+      "failing": [
+        "Southern Barred Frog",
+        "Tylers Toadlet"
+      ]
+    },
+    {
+      "label": "win1.0+mfcc30+fft1024",
+      "params": {
+        "win_sec": 1.0,
+        "n_mfcc": 30,
+        "n_fft": 1024
+      },
+      "val_f1": 0.8993,
+      "accuracy": 0.8889,
+      "correct": 32,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Southern Barred Frog",
+        "Red-groined Froglet",
+        "Tylers Toadlet"
+      ]
+    },
+    {
+      "label": "win1.0+fft1024+hop256",
+      "params": {
+        "win_sec": 1.0,
+        "n_fft": 1024,
+        "hop_length": 256
+      },
+      "val_f1": 0.9017,
+      "accuracy": 0.9444,
+      "correct": 34,
+      "total": 36,
+      "failing": [
+        "Southern Barred Frog",
+        "Tylers Toadlet"
+      ]
+    },
+    {
+      "label": "win1.0+noise0.1",
+      "params": {
+        "win_sec": 1.0,
+        "aug_noise_lvl": 0.1
+      },
+      "val_f1": 0.9507,
+      "accuracy": 0.9167,
+      "correct": 33,
+      "total": 36,
+      "failing": [
+        "Southern Barred Frog",
+        "Martins Toadlet",
+        "Tylers Toadlet"
+      ]
+    }
+  ]
+}
