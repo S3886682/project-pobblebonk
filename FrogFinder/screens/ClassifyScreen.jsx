@@ -1,78 +1,21 @@
-
-// Elements: 
-// two buttons - record with "record" text  and upload "upload file". 
-// Title "Identify Frog Call". 
-// Image background of frog prints. 
-// Nav bar at bottom. 
-// modal popups for frog classification, error/frog not found, upload file
-// function: 
-// record button when pressed checks for app mic access.
-// If available turns to "stop" text, inputs audio.
-// If unavailable, pulls error modal to alert
-// once pressed for second time: "stop", activates cladsify function. 
-// after classifying, if frog found -> pull up classify modal with frog info. 
-// if not found or other error, previous error popup triggerred.
-// Upload button -> allow user to select a video from their phone (need to specify file types?)
-// upload file modal -> appear after clicking "upload file" button. allows user to select file, displays selected file and asks for confirmation.
-// uploaded file processed -> classify process begins, if found -> pull up classify modal with frog info. 
-// if not found or other error, previous error popup triggerred.
-//last touches - image to frog identification modal (same system as search page modal), update supported file formats, 
-
-import React, {useState } from "react";
-import {View, Text, TouchableOpacity, StyleSheet, Modal, Pressable, Image, ImageBackground} from "react-native";
-import { useClassifier } from '../hooks/useClassifier'; //to pull classification model
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { createAudioPlayer } from 'expo-audio';
 import { useRecorder } from '../hooks/useRecorder';
 import { filePickerService } from "../services/filePickerService";
 
 export function ClassifyScreen() {
   const { isRecording, startRecording, stopRecording } = useRecorder();
 
-  //Modals
-  const [uploadPopup, setUploadPopup] = useState(false);
-  const [classifyPopup, setClassifyPopup] = useState(false);
-  const [errorPopup, setErrorPopup] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  // Holds the URI of the last recorded or uploaded file so it can be played back
+  const [audioUri, setAudioUri] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const { classify } = useClassifier();
-  const [result, setResult] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
-
-//----------------------- RECORD and CLASSIFY AUDIO --------------------------------------------------
-
-  const recordPress = async () => {
-  try {
-    if (isRecording) {
-      const audioFile = await stopRecording();
-      setLoading(true); //enables loading popup
-      const res = await classify(audioFile);
-      setLoading(false); //closes loading popup
-      if (res) {
-        setResult(res);
-        setClassifyPopup(true);
-      
-      } else {
-        setErrorMessage("Frog not found.");
-        setErrorPopup(true);
-      }
-    } else {
-      const success = await startRecording();
-      if (!success) {
-        setErrorMessage("Please enable microphone access");
-        setErrorPopup(true);
-      }
-    }
-  } catch {
-    setLoading(true); 
-    setErrorMessage("Recording failed.");
-    setErrorPopup(true);
-  }
-};
-
-//----------------------- UPLOAD FILE SELECTION --------------------------------------------------
-  //open upload modal
-  const uploadPress = () => {
-    setUploadPopup(true);
+  // These functions handle backend logic for recording and file upload, and then call classify() with the resulting audio file to get classification results
+  const handleStopRecording = async () => {
+    const audioFile = await stopRecording();
+    setAudioUri(audioFile);
+    await classify(audioFile);
   };
 
   //pick upload file and ctach errors
@@ -82,61 +25,39 @@ export function ClassifyScreen() {
       await filePickerService.pickAudioFile();
 
     if (audioFile) {
-      setSelectedFile(audioFile);
-    }
-  } catch {
-    setErrorMessage(
-      "Unable to select file."
-    );
-    setErrorPopup(true);
-  }
-};
-
-// confirm upload file and ensure file exists
-  const confirmUpload = async () => {
-    try {
-      if (!selectedFile) {
-        setErrorMessage(
-          "No file selected."
-        );
-        setErrorPopup(true);
-        return;
-      }
-
-      setUploadPopup(false);
-
-      setLoading(true);  
-      const res = await classify(selectedFile);
-      setLoading(false); 
-
-      if (res) {
-        setResult(res);
-        setClassifyPopup(true);
-      } else {
-        setErrorMessage(
-          "Frog not found."
-        );
-        setErrorPopup(true);
-      }
-    } catch {
-      setLoading(false); 
-      setErrorMessage(
-        "Classification failed."
-      );
-      setErrorPopup(true);
+      setAudioUri(audioFile);
+      await classify(audioFile);
     }
   };
 
-//----------------------- PAGE BUILD --------------------------------------------------
+  // Creates a temporary player, plays the file once, then releases it
+  const handlePlayAudio = async () => {
+    if (!audioUri || isPlaying) {
+      return;
+    }
+
+    setIsPlaying(true);
+    const player = createAudioPlayer(audioUri);
+
+    const subscription = player.addListener('playbackStatusUpdate', (status) => {
+      if (status.didJustFinish) {
+        subscription.remove();
+        player.release();
+        setIsPlaying(false);
+      }
+    });
+
+    player.play();
+  };
+
+  const recordButtonText = isRecording ? 'Stop Recording' : 'Start Recording';
+  const recordButtonPress = isRecording ? handleStopRecording : startRecording;
 
   return (
-    <ImageBackground
-          source={require('../assets/background_image.png')}
-          style={styles.background}
-          resizeMode="cover"
-          >
-      <View style={styles.overlay}>
-        <Text style={styles.title}>Identify Frog Call</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Record or Upload Frog Call</Text>
+
+      <Text>Press record or upload an audio file to classify</Text>
 
 {/*----------------------- RECORD BUTTON ----------------------------------------------------*/}
         <TouchableOpacity
@@ -157,18 +78,14 @@ export function ClassifyScreen() {
         </TouchableOpacity>
       </View>
 
-{/*----------------------- LOADING MODAL --------------------------------------------------*/}
-<Modal transparent visible={isLoading} animationType="fade">
-  <View style={styles.modalBackground}>
-    <View style={styles.loadingContainer}>
-      <Image
-        source={require('../assets/frog-spin.gif')}
-        style={styles.loadingGif}
-      />
-      <Text style={styles.loadingTitle}>Finding Frog...</Text>
-    </View>
-  </View>
-</Modal>
+      {/* Play button shown only when there is an audio file to test */}
+      {audioUri && (
+        <TouchableOpacity onPress={handlePlayAudio} style={styles.playButton} disabled={isPlaying}>
+          <Text style={styles.buttonText}>{isPlaying ? 'Playing...' : 'Play Audio'}</Text>
+        </TouchableOpacity>
+      )}
+
+      {loading && <ActivityIndicator color={Theme.colors.primary} size="large" style={{ marginVertical: 20 }} />}
 
 {/*----------------------- UPLOAD MODAL --------------------------------------------------*/}
       <Modal
@@ -362,26 +279,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 200,
   },
-
-  closeButton: {
-    backgroundColor: "#254f27",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
+  playButton: {
+    backgroundColor: Theme.colors.secondary,
+    paddingVertical: Theme.spacing.md,
+    paddingHorizontal: Theme.spacing.lg,
+    borderRadius: 8,
+    marginVertical: Theme.spacing.sm,
+    alignItems: 'center',
   },
-
-  uploadButton: {
-    width: 220,
-    height:100,
-    backgroundColor: "#254f27",
-    paddingVertical: 16,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 450,
-  },
-
   buttonText: {
     color: "white",
     fontSize: 18,
@@ -450,116 +355,4 @@ loadingGif: {
     paddingLeft: 8,
     paddingTop: 8,
   },
-
-  modalConfidence: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    paddingLeft: 8,
-    paddingTop: 8,
-  },
-
-  modalAttribute: {
-  fontWeight: 'bold',
-  textAlign: 'left',
-  },
-
-  modalRow: {
-    flexDirection: 'row',
-    marginTop: 12,
-    marginBottom: 8,
-  },
-
-  modalRowValue: {
-    flexShrink: 1,
-    textAlign: 'left',
-  },
-
-  modalCol: {
-    flexDirection: 'column',
-    marginTop: 6,
-    marginBottom: 6,
-  },
-
-//Upload Modal
-modalSubtitle: {
-    fontSize: 14,
-    color: "#4a4a4a",
-    marginBottom: 20,
-  },
-
-  selectFileButtonSelected: {
-    backgroundColor: "#538356",
-    borderColor: "#0c2a0e",
-    borderWidth: 2,
-  },
-
-  browseFilesText: {
-    color: "white",
-    fontSize: 20,
-  },
-
-  selectFileButton: {
-    backgroundColor: "#a8a8a8",
-    borderColor: "#292929",
-    borderWidth: 2,
-    paddingVertical: 14,
-    borderRadius: 2,
-    alignItems: "center",
-    marginBottom: 16,
-  },
-
-  filePreview: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#c4c4c4",
-    borderRadius: 10,
-    padding: 12,
-    marginVertical: 15,
-    marginBottom:18,
-    borderWidth: 1,
-    borderColor: "#565656",
-  },
-
-  filePreviewIcon: {
-    fontSize: 20,
-    marginRight: 10,
-  },
-
-  fileText: {
-    flex: 1,
-    color: "#000000",
-    fontWeight: "600",
-    fontSize: 14,
-  },
-
-  fileHint: {
-    fontSize: 12,
-    color: "#747474",
-    textAlign: "center",
-    marginVertical: 12,
-  },
-
-  disabledButton: {
-    backgroundColor: "#A5D6A7",
-    opacity: 0.6,
-  },
-
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  confirmButton: {
-    backgroundColor: "#254f27",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-  },
-
-  cancelButton: {
-    backgroundColor: "#c34a4a",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-  },
-});
+};

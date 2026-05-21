@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
 import { micRecorderService } from '../services/micRecorderService';
+import { filePickerService } from '../services/filePickerService';
 
 export const useRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingError, setRecordingError] = useState(null);
 
+  // Start capturing audio from the microphone
   const startRecording = useCallback(async () => {
     try {
       setRecordingError(null);
@@ -18,6 +20,7 @@ export const useRecorder = () => {
     return true;
   }, []);
 
+  // Stop the active recording and return the audio file URI
   const stopRecording = useCallback(async () => {
     try {
       setRecordingError(null);
@@ -30,13 +33,12 @@ export const useRecorder = () => {
     }
   }, []);
 
+  // Open the file picker and return the URI of the chosen audio file
   const uploadFromFile = useCallback(async () => {
     try {
       setRecordingError(null);
-      // STUB: Simulating file upload
-      // TODO: Implement actual file picking logic using expo-document-picker @ filePickerService
-      console.log('[STUB] File picker called');
-      return 'dummy-audio-wav';
+      const uri = await filePickerService.pickAudioFile();
+      return uri;
     } catch (error) {
       setRecordingError(error.message);
     }
