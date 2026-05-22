@@ -45,6 +45,7 @@ class ClassifierService {
     const scaled = features.map((v, i) => (v - this.model.scaler_mean[i]) / this.model.scaler_scale[i]);
     const nClasses = this.model.classes.length;
     const votes = new Array(nClasses).fill(0);
+    const margins = new Array(nClasses).fill(0);
 
     // Precompute kernel values for all support vectors once
     const kernelVals = this.model.support_vectors.map(sv => this.rbfKernel(scaled, sv, this.model.gamma));
@@ -68,14 +69,22 @@ class ClassifierService {
           sum += this.model.dual_coef[i][svStart[j] + s] * kernelVals[svStart[j] + s];
         }
 
-        if (sum > 0) votes[i]++; else votes[j]++;
+        if (sum > 0) {
+          votes[i]++;
+          margins[i] += Math.abs(sum);
+        } else {
+          votes[j]++;
+          margins[j] += Math.abs(sum);
+        }
         pairIdx++;
       }
     }
 
     const winnerIdx = votes.indexOf(Math.max(...votes));
     // Confidence = fraction of pairwise votes won by the winner (each class faces n-1 opponents)
-    const confidence = votes[winnerIdx] / (nClasses - 1);
+    //const confidence = votes[winnerIdx] / (nClasses - 1);
+    const totalMargin = margins.reduce((a, b) => a + b, 0);
+    const confidence = margins[winnerIdx] / totalMargin;
     return { label: this.model.classes[winnerIdx], confidence };
   }
 
@@ -130,6 +139,10 @@ class ClassifierService {
   extractFeatures(segment) {
     Meyda.sampleRate = this.SR;
     Meyda.numberOfMFCCCoefficients = this.N_MFCC;
+    //Meyda.numberOfMelBands = this.N_MFCC;
+    //Meyda.bufferSize = this.FFT_SIZE;
+    //Meyda.windowingFunction = 'hanning';
+    //here b
 
     const mfccFrames = [];
     const centroidFrames = [];
