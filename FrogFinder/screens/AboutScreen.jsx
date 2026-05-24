@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Theme.spacing.md,
+    paddingTop: 60,
   },
 
   searchBar: {
