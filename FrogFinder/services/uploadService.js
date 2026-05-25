@@ -1,11 +1,10 @@
-import * as FileSystem from 'expo-file-system';
 import * as Network from 'expo-network';
 import { getSightings, updateSighting } from './sightingService';
 import {
     insertSupabaseSighting,
     uploadAudioToSupabase,
     uploadSpectrogramToSupabase,
-} from './supabase';
+} from '../config/supabase';
 
 // Check if device has internet connection
 export const isConnected = async () => {
@@ -196,7 +195,7 @@ export const syncSightings = async (onProgress = null) => {
 export const getSyncStatus = async () => {
     try {
         const connected = await isConnected();
-        const localSightings = await getAllSightings();
+        const localSightings = await getSightings();
 
         const unsyncedSightings = localSightings.filter((s) => !s.cloud_id);
 

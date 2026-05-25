@@ -14,21 +14,16 @@ export const useClassifier = () => {
       setError(null);
       setClassification(null);
 
-      const { label, confidence, windowCount } = await classifierService.processAudio(uri, setStatus, setProgress);
+      const { label, confidence, all, windowCount, windows } = await classifierService.processAudio(uri, setStatus, setProgress);
 
       const result = {
         topMatch: {
           name: label,
-          scientificName: '',
-          description: 'No description available',
-          habitat: 'Unknown',
-          size: 'Unknown',
-          callDescription: 'Unknown',
-          conservationStatus: 'Unknown',
           confidence,
         },
-        alternatives: [],
+        alternatives: (all ?? []).slice(1).map(({ label: name, confidence: conf }) => ({ name, confidence: conf })),
         windowCount,
+        windows: windows ?? [],
       };
 
       setClassification(result);
@@ -48,15 +43,22 @@ export const useClassifier = () => {
     setError(null);
     setStatus(null);
     setProgress(null);
+    setLoading(false);
   }, []);
 
+  const cancel = useCallback(() => {
+    classifierService.cancelProcessing();
+    reset();
+  }, [reset]);
+
   return {
-    classification,  // { label, confidence, windowCount }
+    classification,
     loading,
     error,
-    progress,        // 0–1 during classification, null otherwise
-    status,          // string status message, null otherwise
-    classify,        // (uri: string) => Promise<{ label, confidence, windowCount }>
+    progress,
+    status,
+    classify,
     reset,
+    cancel,
   };
 };

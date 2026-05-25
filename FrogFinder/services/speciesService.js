@@ -1,4 +1,4 @@
-import speciesData from '../assets/species.json';
+import speciesData from '../assets/data/speciesDetails.json';
 
 class SpeciesService {
   constructor() {

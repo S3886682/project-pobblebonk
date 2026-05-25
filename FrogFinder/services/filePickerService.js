@@ -1,10 +1,7 @@
 import * as DocumentPicker from 'expo-document-picker';
 
-// Accepted MIME types passed to the document picker to filter the file browser
-const SUPPORTED_MIME_TYPES = ['audio/mpeg', 'audio/mp4', 'audio/x-m4a', 'audio/wav', 'audio/wave'];
-
-// Extensions used for a secondary validation check after the file is chosen
-const SUPPORTED_EXTENSIONS = ['.mp3', '.m4a', '.wav'];
+const SUPPORTED_MIME_TYPES = ['audio/wav', 'audio/wave', 'audio/x-wav'];
+const SUPPORTED_EXTENSIONS = ['.wav'];
 
 class FilePickerService {
     async pickAudioFile() {
@@ -27,9 +24,8 @@ class FilePickerService {
             ext = asset.name.slice(asset.name.lastIndexOf('.')).toLowerCase();
         }
 
-        // Reject files that are not mp3, m4a, or wav
         if (!SUPPORTED_EXTENSIONS.includes(ext)) {
-            throw new Error(`Unsupported file type "${ext}". Please choose an mp3, m4a, or wav file.`);
+            throw new Error(`Unsupported file type "${ext}". Please choose a WAV file.`);
         }
 
         return asset.uri;

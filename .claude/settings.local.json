@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"from PIL import Image; img = Image.open\\('perons_tree_frog.jpg'\\); img.save\\('perons_tree_frog.png', 'PNG'\\); print\\('done'\\)\")",
+      "Bash(python export_model_json.py)",
+      "Bash(python -c ' *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('mpg123-decoder'\\); console.log\\('ok'\\)\")",
+      "Bash(python train.py)",
+      "Bash(python evaluate.py)",
+      "Bash(npx expo *)",
+      "Bash(node -e \"const { MPEGDecoder } = require\\('mpg123-decoder'\\); const d = new MPEGDecoder\\(\\); console.log\\('type of ready:', typeof d.ready\\); d.ready.then\\(\\(\\) => { console.log\\('ready resolved'\\); d.free\\(\\); }\\).catch\\(e => console.log\\('ready rejected:', e.message\\)\\);\")",
+      "Bash(node -e \"const p = require.resolve\\('mpg123-decoder'\\); console.log\\(p\\)\")",
+      "Bash(node -e \"const src = require\\('fs'\\).readFileSync\\('c:/Users/ashle/OneDrive/Documents/Repos/project-pobblebonk/FrogFinder/node_modules/mpg123-decoder/src/mpg123Decoder.js', 'utf8'\\); console.log\\(src.slice\\(0, 500\\)\\)\")",
+      "Bash(node -e \"const src = require\\('fs'\\).readFileSync\\('c:/Users/ashle/OneDrive/Documents/Repos/project-pobblebonk/FrogFinder/node_modules/mpg123-decoder/src/EmscriptenWasm.js', 'utf8'\\); console.log\\(src.slice\\(0, 800\\)\\)\")",
+      "Bash(node -e \"const src = require\\('fs'\\).readFileSync\\('c:/Users/ashle/OneDrive/Documents/Repos/project-pobblebonk/FrogFinder/node_modules/mpg123-decoder/src/EmscriptenWasm.js', 'utf8'\\); const wasmIdx = src.indexOf\\('wasmBinary'\\); console.log\\('Has wasmBinary:', wasmIdx > -1\\); const b64 = src.indexOf\\('base64'\\); console.log\\('Has base64:', b64 > -1\\); console.log\\('File size \\(KB\\):', Math.round\\(src.length/1024\\)\\);\")",
+      "Bash(ffmpeg -version)",
+      "Bash(python -c \"import json; m=json.load\\(open\\('../FrogFinder/services/svm_model.json'\\)\\); print\\('classes:', m['classes']\\); print\\('n_features \\(scaler_mean len\\):', len\\(m['scaler_mean']\\)\\); print\\('gamma:', m['gamma']\\); print\\('n_support:', m['n_support']\\); print\\('n_classes:', len\\(m['classes']\\)\\); print\\('n_SVs:', len\\(m['support_vectors']\\)\\); print\\('SV dim:', len\\(m['support_vectors'][0]\\)\\)\")"
+    ]
+  }
+}

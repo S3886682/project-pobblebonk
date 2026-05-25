@@ -1,4 +1,4 @@
-import db from './database';
+import db from '../config/database';
 
 // Get all sightings
 export const getSightings = async () => {

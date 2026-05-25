@@ -1,0 +1,271 @@
+{
+  "timestamp": "2026-05-24T11:57:34.006712",
+  "model": "models\\latest\\model.pkl",
+  "config": {
+    "sample_rate": 32000,
+    "n_mfcc": 20,
+    "n_fft": 2048,
+    "hop_length": 256,
+    "window_duration": 1.0,
+    "window_step": 0.67
+  },
+  "summary": {
+    "total": 36,
+    "correct": 35,
+    "accuracy": 0.9722
+  },
+  "results": [
+    {
+      "file": "01 Spotted Marsh Frog.mp3",
+      "truth": "Spotted Marsh Frog",
+      "predicted": "Spotted Marsh Frog",
+      "confidence": 0.6098,
+      "correct": true
+    },
+    {
+      "file": "02 Southern Brown Tree Frog.mp3",
+      "truth": "Southern Brown Tree Frog",
+      "predicted": "Southern Brown Tree Frog",
+      "confidence": 0.8615,
+      "correct": true
+    },
+    {
+      "file": "03 Peron's Tree Frog.mp3",
+      "truth": "Peron's Tree Frog",
+      "predicted": "Perons Tree Frog",
+      "confidence": 0.5052,
+      "correct": true
+    },
+    {
+      "file": "05 Eastern Dwarf Tree Frog.mp3",
+      "truth": "Eastern Dwarf Tree Frog",
+      "predicted": "Eastern Dwarf Tree Frog",
+      "confidence": 0.5366,
+      "correct": true
+    },
+    {
+      "file": "06 Smooth Toadlet.mp3",
+      "truth": "Smooth Toadlet",
+      "predicted": "Smooth Toadlet",
+      "confidence": 0.8605,
+      "correct": true
+    },
+    {
+      "file": "07 Littlejohns Tree Frog.mp3",
+      "truth": "Littlejohns Tree Frog",
+      "predicted": "Littlejohns Tree Frog",
+      "confidence": 0.4092,
+      "correct": true
+    },
+    {
+      "file": "08 Leaf Green Tree Frog.mp3",
+      "truth": "Leaf Green Tree Frog",
+      "predicted": "Leaf Green Tree Frog",
+      "confidence": 0.6568,
+      "correct": true
+    },
+    {
+      "file": "09 Victorian Frog.mp3",
+      "truth": "Victorian Frog",
+      "predicted": "Victorian Frog",
+      "confidence": 0.6773,
+      "correct": true
+    },
+    {
+      "file": "11 Growling Grass Frog.mp3",
+      "truth": "Growling Grass Frog",
+      "predicted": "Growling Grass Frog",
+      "confidence": 0.4837,
+      "correct": true
+    },
+    {
+      "file": "12 Spotted Tree Frog.mp3",
+      "truth": "Spotted Tree Frog",
+      "predicted": "Spotted Tree Frog",
+      "confidence": 0.7218,
+      "correct": true
+    },
+    {
+      "file": "13 Verreauxs Tree Frog.mp3",
+      "truth": "Verreauxs Tree Frog",
+      "predicted": "Verreauxs Tree Frog",
+      "confidence": 0.7133,
+      "correct": true
+    },
+    {
+      "file": "14 Eastern Sign-bearing Froglet.mp3",
+      "truth": "Eastern Sign-bearing Froglet",
+      "predicted": "Eastern Sign-bearing Froglet",
+      "confidence": 0.7816,
+      "correct": true
+    },
+    {
+      "file": "15 Eastern Common Froglet.mp3",
+      "truth": "Eastern Common Froglet",
+      "predicted": "Eastern Common Froglet",
+      "confidence": 0.7667,
+      "correct": true
+    },
+    {
+      "file": "16 Sloanes Froglet.mp3",
+      "truth": "Sloanes Froglet",
+      "predicted": "Sloanes Froglet",
+      "confidence": 0.8819,
+      "correct": true
+    },
+    {
+      "file": "17 Southern Smooth Froglet.mp3",
+      "truth": "Southern Smooth Froglet",
+      "predicted": "Victorian Smooth Froglet",
+      "confidence": 0.1501,
+      "correct": false
+    },
+    {
+      "file": "18 Victorian Smooth Froglet.mp3",
+      "truth": "Victorian Smooth Froglet",
+      "predicted": "Victorian Smooth Froglet",
+      "confidence": 0.609,
+      "correct": true
+    },
+    {
+      "file": "19 Giant Burrowing Frog.mp3",
+      "truth": "Giant Burrowing Frog",
+      "predicted": "Giant Burrowing Frog",
+      "confidence": 0.8373,
+      "correct": true
+    },
+    {
+      "file": "20 Eastern Banjo Frog.wav",
+      "truth": "Eastern Banjo Frog",
+      "predicted": "Eastern Banjo Frog",
+      "confidence": 0.737,
+      "correct": true
+    },
+    {
+      "file": "21 Green and Golden Bell Frog.mp3",
+      "truth": "Green and Golden Bell Frog",
+      "predicted": "Green and Golden Bell Frog",
+      "confidence": 0.7918,
+      "correct": true
+    },
+    {
+      "file": "22 Giant Banjo Frog.mp3",
+      "truth": "Giant Banjo Frog",
+      "predicted": "Giant Banjo Frog",
+      "confidence": 0.5741,
+      "correct": true
+    },
+    {
+      "file": "23 Striped Marsh Frog.mp3",
+      "truth": "Striped Marsh Frog",
+      "predicted": "Striped Marsh Frog",
+      "confidence": 0.6373,
+      "correct": true
+    },
+    {
+      "file": "25 Southern Barred Frog.wav",
+      "truth": "Southern Barred Frog",
+      "predicted": "Southern Barred Frog",
+      "confidence": 0.8725,
+      "correct": true
+    },
+    {
+      "file": "26 Mallee Spadefoot Toad.mp3",
+      "truth": "Mallee Spadefoot Toad",
+      "predicted": "Mallee Spadefoot Toad",
+      "confidence": 0.7678,
+      "correct": true
+    },
+    {
+      "file": "27 Common Spadefoot Toad.mp3",
+      "truth": "Common Spadefoot Toad",
+      "predicted": "Common Spadefoot Toad",
+      "confidence": 0.5769,
+      "correct": true
+    },
+    {
+      "file": "28 Red-groined Froglet.mp3",
+      "truth": "Red-groined Froglet",
+      "predicted": "Red-groined Froglet",
+      "confidence": 0.6377,
+      "correct": true
+    },
+    {
+      "file": "29 Baw Baw Frog.mp3",
+      "truth": "Baw Baw Frog",
+      "predicted": "Baw Baw Frog",
+      "confidence": 0.5938,
+      "correct": true
+    },
+    {
+      "file": "30 Bibrons Toadlet.mp3",
+      "truth": "Bibrons Toadlet",
+      "predicted": "Bibrons Toadlet",
+      "confidence": 0.5715,
+      "correct": true
+    },
+    {
+      "file": "31 Dendys Toadlet.mp3",
+      "truth": "Dendys Toadlet",
+      "predicted": "Dendys Toadlet",
+      "confidence": 0.7377,
+      "correct": true
+    },
+    {
+      "file": "32 Southern Toadlet.mp3",
+      "truth": "Southern Toadlet",
+      "predicted": "Southern Toadlet",
+      "confidence": 0.8182,
+      "correct": true
+    },
+    {
+      "file": "34 Martins Toadlet.mp3",
+      "truth": "Martins Toadlet",
+      "predicted": "Martins Toadlet",
+      "confidence": 0.2971,
+      "correct": true
+    },
+    {
+      "file": "35 Wrinkled Toadlet.mp3",
+      "truth": "Wrinkled Toadlet",
+      "predicted": "Wrinkled Toadlet",
+      "confidence": 0.5838,
+      "correct": true
+    },
+    {
+      "file": "36 Tylers Toadlet.mp3",
+      "truth": "Tylers Toadlet",
+      "predicted": "Tylers Toadlet",
+      "confidence": 0.3834,
+      "correct": true
+    },
+    {
+      "file": "37 Booroolong Frog.wav",
+      "truth": "Booroolong Frog",
+      "predicted": "Booroolong Frog",
+      "confidence": 0.9736,
+      "correct": true
+    },
+    {
+      "file": "38 Blue Mountains Tree Frog.mp3",
+      "truth": "Blue Mountains Tree Frog",
+      "predicted": "Blue Mountains Tree Frog",
+      "confidence": 0.5069,
+      "correct": true
+    },
+    {
+      "file": "39 Lesueurs Tree Frog.mp3",
+      "truth": "Lesueurs Tree Frog",
+      "predicted": "Lesueurs Tree Frog",
+      "confidence": 0.4883,
+      "correct": true
+    },
+    {
+      "file": "40 Barking Marsh Frog.mp3",
+      "truth": "Barking Marsh Frog",
+      "predicted": "Barking Marsh Frog",
+      "confidence": 0.5874,
+      "correct": true
+    }
+  ]
+}

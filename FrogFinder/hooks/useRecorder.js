@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Platform } from 'react-native';
 import { micRecorderService } from '../services/micRecorderService';
 import { filePickerService } from '../services/filePickerService';
 
@@ -26,7 +27,12 @@ export const useRecorder = () => {
       setRecordingError(null);
       const uri = await micRecorderService.stopRecording();
       setIsRecording(false);
-      return { uri, fileName: 'recording.m4a', mimeType: 'audio/m4a' };   // wrap uri
+      const isAndroid = Platform.OS === 'android';
+      return {
+        uri,
+        fileName: isAndroid ? 'recording.m4a' : 'recording.wav',
+        mimeType: isAndroid ? 'audio/m4a' : 'audio/wav',
+      };
     } catch (error) {
       console.error('[useRecorder] stopRecording failed:', error);
       setRecordingError(error.message);

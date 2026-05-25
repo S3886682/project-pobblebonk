@@ -11,6 +11,7 @@ import warnings
 
 import librosa
 import numpy as np
+from scipy.fft import dct as scipy_dct
 
 from config import AUG_NOISE_LVL, HOP_LENGTH, N_FFT, N_MFCC, SAMPLE_RATE, WIN_SEC
 
@@ -21,14 +22,63 @@ BACKGROUND_DIR = "Background Audio"
 
 WIN_SAMPLES = int(SAMPLE_RATE * WIN_SEC)
 
+# Mel filterbank built once at import time — matches Meyda's createMelFilterBank:
+#   HTK mel scale (1125*ln(1+f/700)), fmin=0, unnormalized triangular filters
+# Meyda's mel band loop runs j < bufferSize/2 (1024 bins, not 1025),
+# so we truncate the librosa filterbank to the first N_FFT//2 columns.
+_N_BINS  = N_FFT // 2   # 1024
+_N_MELS  = 128
+_MEL_FB  = librosa.filters.mel(sr=SAMPLE_RATE, n_fft=N_FFT, n_mels=_N_MELS,
+                               fmin=0.0, htk=True, norm=None)[:, :_N_BINS]
+
+
+def _meyda_mfcc(y, sr, n_fft, hop_length, n_mfcc):
+    """MFCC frames matching Meyda.js exactly.
+
+    Pipeline:
+      ampSpectrum² → mel filterbank (HTK, fmin=0, unnorm) → log(x+1) → unnorm DCT-II
+    Returns shape (n_mfcc, n_frames).
+    """
+    n_bins = n_fft // 2
+
+    # Reuse the module-level filterbank when params match config; rebuild otherwise.
+    if sr == SAMPLE_RATE and n_fft == N_FFT and n_bins == _N_BINS:
+        mel_fb = _MEL_FB
+    else:
+        mel_fb = librosa.filters.mel(sr=sr, n_fft=n_fft, n_mels=_N_MELS,
+                                     fmin=0.0, htk=True, norm=None)[:, :n_bins]
+
+    # center=False: Meyda iterates i=0, hop, 2*hop, ... while i+fftSize<=len
+    D   = librosa.stft(y, n_fft=n_fft, hop_length=hop_length, window='hann', center=False)
+    amp = np.abs(D)                          # (n_fft//2+1, n_frames)
+    pow_spec = amp[:n_bins, :] ** 2          # (1024, n_frames) — first 1024 bins only
+
+    mel_energy = mel_fb @ pow_spec           # (128, n_frames)
+    mel_log    = np.log(mel_energy + 1.0)    # Meyda: Math.log(x + 1)
+
+    # Unnormalized DCT-II: 2 * sum(x[n] * cos(pi/N * (n+0.5) * k))
+    mfcc = scipy_dct(mel_log, type=2, norm=None, axis=0)[:n_mfcc, :]
+    return mfcc
+
 
 def extract_features(y, n_mfcc=N_MFCC, n_fft=N_FFT, hop_length=HOP_LENGTH, sr=SAMPLE_RATE):
-    """MFCC + delta + delta-delta + spectral contrast + centroid (mean & std each)."""
-    mfcc     = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc, n_fft=n_fft, hop_length=hop_length)
-    delta1   = librosa.feature.delta(mfcc, order=1)
-    delta2   = librosa.feature.delta(mfcc, order=2)
-    contrast = librosa.feature.spectral_contrast(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length)
-    centroid = librosa.feature.spectral_centroid(y=y, sr=sr, n_fft=n_fft, hop_length=hop_length)
+    """MFCC + delta + delta-delta + spectral contrast + centroid (mean & std each).
+
+    MFCC computation matches Meyda.js so on-device inference uses the same feature
+    space as training. Delta width=9 (half-width 4) matches classifierService.js D=4.
+    """
+    mfcc   = _meyda_mfcc(y, sr, n_fft, hop_length, n_mfcc)
+    delta1 = librosa.feature.delta(mfcc, order=1, width=9)
+    delta2 = librosa.feature.delta(mfcc, order=2, width=9)
+
+    # Compute STFT once for contrast + centroid (center=False, amplitude spectrum)
+    D = librosa.stft(y, n_fft=n_fft, hop_length=hop_length, window='hann', center=False)
+    S = np.abs(D)   # amplitude spectrum (n_fft//2+1, n_frames)
+
+    contrast = librosa.feature.spectral_contrast(S=S, sr=sr, n_fft=n_fft,
+                                                 n_bands=6, fmin=200.0)
+    centroid = librosa.feature.spectral_centroid(S=S, sr=sr)
+
     feats = []
     for m in [mfcc, delta1, delta2, contrast, centroid]:
         feats.append(np.mean(m, axis=1))
