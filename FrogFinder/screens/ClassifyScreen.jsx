@@ -8,6 +8,7 @@ import { createAudioPlayer } from 'expo-audio';
 import { useRecorder } from '../hooks/useRecorder';
 import { useClassifier } from '../hooks/useClassifier';
 import { filePickerService } from '../services/filePickerService';
+import { sightingsService } from '../services/sightingsService';
 import { frogImages } from '../assets/images/frogImages';
 import speciesData from '../assets/data/speciesDetails.json';
 
@@ -304,6 +305,7 @@ export function ClassifyScreen() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [result, setResult]       = useState(null);
   const [error, setError]         = useState(null);
+  const [saved, setSaved]         = useState(false);
   const cancelledRef = useRef(false);
   const playerRef    = useRef(null);
 
@@ -314,10 +316,25 @@ export function ClassifyScreen() {
   const confidence      = result?.topMatch?.confidence ?? 0;
   const frogImageSource = speciesInfo?.image ? frogImages[speciesInfo.image] : null;
 
+  const handleSaveSighting = async () => {
+    if (!result || noFrogFound) return;
+    await sightingsService.addSighting({
+      species:      result.topMatch.name,
+      confidence:   result.topMatch.confidence,
+      alternatives: (result.topMatch.all ?? []).slice(1).map(a => ({
+        species:    a.label,
+        confidence: a.confidence,
+      })),
+      date: new Date().toISOString(),
+    });
+    setSaved(true);
+  };
+
   const runClassify = async (uri) => {
     cancelledRef.current = false;
     setError(null);
     setResult(null);
+    setSaved(false);
     try {
       const classResult = await classify(uri);
       if (!cancelledRef.current) setResult(classResult);
@@ -426,6 +443,14 @@ export function ClassifyScreen() {
               <View style={styles.barTrack}>
                 <View style={[styles.barFill, { width: `${(confidence * 100).toFixed(0)}%` }]} />
               </View>
+
+              <TouchableOpacity
+                style={[styles.saveBtn, saved && styles.saveBtnDone]}
+                onPress={handleSaveSighting}
+                disabled={saved}
+              >
+                <Text style={styles.saveBtnText}>{saved ? 'Saved to Sightings ✓' : 'Save Sighting'}</Text>
+              </TouchableOpacity>
 
               {speciesInfo && (
                 <View style={styles.detailsSection}>
@@ -561,6 +586,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden', marginBottom: 14,
   },
   barFill: { height: '100%', backgroundColor: GREEN, borderRadius: 3 },
+
+  saveBtn: {
+    marginHorizontal: 16,
+    marginBottom: 14,
+    backgroundColor: GREEN,
+    borderRadius: 10,
+    paddingVertical: 11,
+    alignItems: 'center',
+  },
+  saveBtnDone: { backgroundColor: '#A5C8A8' },
+  saveBtnText: { color: '#FFF', fontSize: 14, fontWeight: '600' },
 
   detailsSection: {
     borderTopWidth: 1, borderTopColor: '#F0F0F0',

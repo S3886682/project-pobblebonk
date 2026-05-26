@@ -1,17 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView,
   TextInput, FlatList, TouchableOpacity, Modal, Image,
 } from 'react-native';
+import { Asset } from 'expo-asset';
+import { createAudioPlayer } from 'expo-audio';
 import { frogImages } from '../assets/images/frogImages';
+import { frogAudio } from '../assets/audio/frogAudio';
 import frogData from '../assets/data/speciesDetails.json';
 
-const DARK = '#1C1C1E';
+const DARK  = '#1C1C1E';
 const GREEN = '#4A7C59';
 
+// Preload all frog images once so first-render is instant after startup
+const IMAGE_ASSETS = Object.values(frogImages);
+Asset.loadAsync(IMAGE_ASSETS).catch(() => {});
+
 export const AboutScreen = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch]           = useState('');
   const [selectedFrog, setSelectedFrog] = useState(null);
+  const [playingId, setPlayingId]     = useState(null);
+  const playerRef                     = useRef(null);
+
+  // Stop any playing audio when the component unmounts
+  useEffect(() => () => { playerRef.current?.release(); }, []);
+
+  const handlePlay = (item) => {
+    const audioSrc = frogAudio[item.image];
+    if (!audioSrc) return;
+
+    // Tapping the same frog stops it
+    if (playingId === item.id) {
+      playerRef.current?.release();
+      playerRef.current = null;
+      setPlayingId(null);
+      return;
+    }
+
+    // Stop previous player
+    playerRef.current?.release();
+    playerRef.current = null;
+    setPlayingId(null);
+
+    const player = createAudioPlayer(audioSrc);
+    playerRef.current = player;
+    setPlayingId(item.id);
+
+    player.addListener('playbackStatusUpdate', (status) => {
+      if (status.didJustFinish) {
+        player.release();
+        playerRef.current = null;
+        setPlayingId(null);
+      }
+    });
+    player.play();
+  };
 
   const filteredFrogs = frogData.filter((frog) =>
     frog.name.toLowerCase().includes(search.toLowerCase())
@@ -34,32 +77,49 @@ export const AboutScreen = () => {
           data={filteredFrogs}
           keyExtractor={(item) => item.id ?? item.name}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.row}
-              onPress={() => setSelectedFrog(item)}
-              activeOpacity={1}
-            >
-              {item.image && frogImages[item.image] ? (
-                <Image
-                  source={frogImages[item.image]}
-                  style={styles.rowThumb}
-                  resizeMode="cover"
-                  fadeDuration={0}
-                />
-              ) : (
-                <View style={[styles.rowThumb, styles.rowThumbPlaceholder]}>
-                  <Text style={styles.rowThumbText}>?</Text>
+          renderItem={({ item }) => {
+            const hasAudio   = !!frogAudio[item.image];
+            const isPlaying  = playingId === item.id;
+            return (
+              <TouchableOpacity
+                style={styles.row}
+                onPress={() => setSelectedFrog(item)}
+                activeOpacity={0.85}
+              >
+                {item.image && frogImages[item.image] ? (
+                  <Image
+                    source={frogImages[item.image]}
+                    style={styles.rowThumb}
+                    resizeMode="cover"
+                    fadeDuration={0}
+                  />
+                ) : (
+                  <View style={[styles.rowThumb, styles.rowThumbPlaceholder]}>
+                    <Text style={styles.rowThumbText}>?</Text>
+                  </View>
+                )}
+
+                <View style={styles.rowText}>
+                  <Text style={styles.rowName}>{item.name}</Text>
+                  {item.scientific_name ? (
+                    <Text style={styles.rowScientific}>{item.scientific_name}</Text>
+                  ) : null}
                 </View>
-              )}
-              <View style={styles.rowText}>
-                <Text style={styles.rowName}>{item.name}</Text>
-                {item.scientific_name ? (
-                  <Text style={styles.rowScientific}>{item.scientific_name}</Text>
-                ) : null}
-              </View>
-            </TouchableOpacity>
-          )}
+
+                {hasAudio && (
+                  <TouchableOpacity
+                    style={[styles.playBtn, isPlaying && styles.playBtnActive]}
+                    onPress={(e) => { e.stopPropagation(); handlePlay(item); }}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Text style={[styles.playBtnIcon, isPlaying && styles.playBtnIconActive]}>
+                      {isPlaying ? '■' : '▶'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </TouchableOpacity>
+            );
+          }}
         />
 
         <Modal visible={!!selectedFrog} transparent animationType="slide">
@@ -82,10 +142,10 @@ export const AboutScreen = () => {
                 ) : null}
 
                 {[
-                  ['Call',                 selectedFrog?.callDescription],
-                  ['Habitat',              selectedFrog?.habitat],
-                  ['Size',                 selectedFrog?.size],
-                  ['Conservation Status',  selectedFrog?.conservationStatus],
+                  ['Call',                selectedFrog?.callDescription],
+                  ['Habitat',             selectedFrog?.habitat],
+                  ['Size',                selectedFrog?.size],
+                  ['Conservation Status', selectedFrog?.conservationStatus],
                 ].map(([label, value]) =>
                   value ? (
                     <View key={label} style={styles.detailRow}>
@@ -131,7 +191,6 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 
-  // List row
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -156,29 +215,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  rowThumbText: {
-    fontSize: 22,
-    color: '#999',
-  },
-  rowText: {
-    flex: 1,
-  },
-  rowName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: DARK,
-  },
-  rowScientific: {
-    fontSize: 12,
-    fontStyle: 'italic',
-    color: '#777',
-    marginTop: 2,
-  },
+  rowThumbText: { fontSize: 22, color: '#999' },
+  rowText:      { flex: 1 },
+  rowName:      { fontSize: 15, fontWeight: '600', color: DARK },
+  rowScientific: { fontSize: 12, fontStyle: 'italic', color: '#777', marginTop: 2 },
 
-  // Modal
+  playBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#E8F5E9',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
+  },
+  playBtnActive: { backgroundColor: GREEN },
+  playBtnIcon:   { fontSize: 13, color: GREEN },
+  playBtnIconActive: { color: '#FFF' },
+
+  // Modal — no dark overlay
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.25)',
     justifyContent: 'flex-end',
   },
   modalCard: {
@@ -224,16 +281,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginBottom: 6,
   },
-  detailLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: DARK,
-  },
-  detailValue: {
-    fontSize: 13,
-    color: '#555',
-    flex: 1,
-  },
+  detailLabel: { fontSize: 13, fontWeight: '600', color: DARK },
+  detailValue:  { fontSize: 13, color: '#555', flex: 1 },
   closeButton: {
     marginTop: 20,
     backgroundColor: GREEN,
@@ -241,9 +290,5 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     alignItems: 'center',
   },
-  closeButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
+  closeButtonText: { color: '#FFF', fontSize: 16, fontWeight: '600' },
 });

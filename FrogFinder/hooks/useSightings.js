@@ -1,100 +1,36 @@
-import { useState, useEffect } from 'react';
-
-const DUMMY_SIGHTINGS = [
-  {
-    id: '1',
-    species: 'Pobblebonk',
-    confidence: 0.92,
-    alternatives: [
-      { species: 'Eastern Banjo Frog', confidence: 0.71 },
-      { species: 'Striped Marsh Frog', confidence: 0.68 },
-    ],
-    date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    location: {
-      latitude: -37.8136,
-      longitude: 144.9631,
-      locality: 'Melbourne, VIC',
-    },
-  },
-  {
-    id: '2',
-    species: 'Green Tree Frog',
-    confidence: 0.87,
-    alternatives: [
-      { species: 'Common Eastern Froglet', confidence: 0.84 },
-      { species: 'Mountain Frog', confidence: 0.72 },
-    ],
-    date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    location: {
-      latitude: -27.4698,
-      longitude: 153.0251,
-      locality: 'Brisbane, QLD',
-    },
-  },
-  {
-    id: '3',
-    species: 'Southern Bell Frog',
-    confidence: 0.78,
-    alternatives: [
-      { species: 'Striped Marsh Frog', confidence: 0.76 },
-      { species: 'Common Eastern Froglet', confidence: 0.65 },
-    ],
-    date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    location: {
-      latitude: -38.1409,
-      longitude: 145.3892,
-      locality: 'Sale, VIC',
-    },
-  },
-];
+import { useState, useEffect, useCallback } from 'react';
+import { sightingsService } from '../services/sightingsService';
 
 export const useSightings = () => {
-  const [sightings, setSightings] = useState(DUMMY_SIGHTINGS);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [sightings, setSightings] = useState([]);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState(null);
 
-  const fetchSightings = async () => {
+  const fetchSightings = useCallback(async () => {
     try {
       setLoading(true);
-      // STUB: Return dummy sightings
-      console.log('[STUB] Fetching sightings...');
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setSightings(DUMMY_SIGHTINGS);
+      const data = await sightingsService.getSightings();
+      setSightings(data);
       setError(null);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const addSighting = async (sighting) => {
-    try {
-      // STUB: Add dummy sighting locally
-      const newSighting = {
-        id: Date.now().toString(),
-        species: sighting.species,
-        confidence: sighting.confidence,
-        alternatives: sighting.alternatives,
-        date: sighting.date,
-        location: sighting.location,
-      };
-      
-      const updatedSightings = sightings.concat(newSighting);
-      setSightings(updatedSightings);
-      console.log('[STUB] Sighting added:', newSighting);
-      return newSighting;
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    }
-  };
+  useEffect(() => { fetchSightings(); }, [fetchSightings]);
 
-  return {
-    sightings,
-    loading,
-    error,
-    fetchSightings,
-    addSighting,
-  };
+  const addSighting = useCallback(async (sighting) => {
+    const entry = await sightingsService.addSighting(sighting);
+    setSightings(prev => [entry, ...prev]);
+    return entry;
+  }, []);
+
+  const deleteSighting = useCallback(async (id) => {
+    await sightingsService.deleteSighting(id);
+    setSightings(prev => prev.filter(s => s.id !== id));
+  }, []);
+
+  return { sightings, loading, error, fetchSightings, addSighting, deleteSighting };
 };
