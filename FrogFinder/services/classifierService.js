@@ -6,9 +6,10 @@ import Meyda from 'meyda';
 // Audio / model constants — must match config.py + export_model_json.py
 // ---------------------------------------------------------------------------
 const SR             = 32000;
+const RMS_SILENCE_THRESHOLD = 0.008; // ~-42 dBFS — skips near-silence without cutting quiet frog calls
 const WIN_SAMPLES    = Math.round(SR * 1.0);    // 32000 — 1 s window
-const STRIDE_SAMPLES = Math.round(SR * 0.5);    // 16000 — 50 % overlap
-const N_MFCC         = 20;
+const STRIDE_SAMPLES = Math.round(SR * 0.67);   // 21440 — 67 % step (matches evaluate.py, ~25 % fewer windows)
+const N_MFCC         = 30;
 const FFT_SIZE       = 2048;
 const HOP_SIZE       = 256;
 const N_BANDS        = 6;
@@ -153,6 +154,7 @@ function mfccDCT(melLog) {
   return out;
 }
 
+
 function buildCache(model) {
   const nClasses = model.classes.length;
   const svStart  = new Array(nClasses).fill(0);
@@ -187,8 +189,8 @@ function predict(features) {
     return Math.exp(-MODEL.gamma * (xNormSq - 2 * dot + svNormSq[k]));
   });
 
-  const votes = new Array(nClasses).fill(0);
-  const dfWon = new Array(nClasses).fill(0);
+  const votes   = new Array(nClasses).fill(0);
+  const decVals = [];
   let pairIdx = 0;
 
   for (let i = 0; i < nClasses; i++) {
@@ -199,23 +201,37 @@ function predict(features) {
       for (let s = 0; s < MODEL.n_support[j]; s++)
         sum += dualCoef[i][svStart[j] + s] * kernelVals[svStart[j] + s];
 
-      if (sum > 0) { votes[i]++; dfWon[i] += sum; }
-      else         { votes[j]++; dfWon[j] -= sum; }
+      decVals.push(sum);
+      if (sum > 0) votes[i]++;
+      else         votes[j]++;
       pairIdx++;
     }
   }
 
-  const winnerIdx  = votes.indexOf(Math.max(...votes));
-  // Fraction of pairwise matchups the winner won (0–1). With 37 classes each class
-  // participates in 36 pairs, so a clean win gives 100 % and random noise gives ~3 %.
-  const confidence = votes[winnerIdx] / (nClasses - 1);
-  return { label: MODEL.classes[winnerIdx], confidence };
+  const winnerIdx = votes.indexOf(Math.max(...votes));
+
+  if (MODEL.prob_a && MODEL.prob_b) {
+    // Mean pairwise Platt probability for the vote winner — avg P(winner beats j) across all 36 matchups.
+    // Avoids Wu et al. multiclass coupling, which can give low probability when vote/Platt winners disagree.
+    let pairSum = 0, idx = 0;
+    for (let i = 0; i < nClasses; i++) {
+      for (let j = i + 1; j < nClasses; j++) {
+        const raw = 1 / (1 + Math.exp(MODEL.prob_a[idx] * decVals[idx] + MODEL.prob_b[idx]));
+        const rij = Math.min(Math.max(raw, 1e-7), 1 - 1e-7);
+        if (i === winnerIdx) pairSum += rij;
+        else if (j === winnerIdx) pairSum += 1 - rij;
+        idx++;
+      }
+    }
+    return { label: MODEL.classes[winnerIdx], confidence: pairSum / (nClasses - 1) };
+  }
+
+  return { label: MODEL.classes[winnerIdx], confidence: votes[winnerIdx] / (nClasses - 1) };
 }
 
-// Returns the winning label plus an `all` array (top-5 species sorted by vote count).
-// confidence = average per-window SVM decision-function confidence for each species,
-// NOT the fraction of windows that voted for it (which would be 100% if every window
-// agrees, regardless of how uncertain each individual prediction was).
+// Winner by vote count (consistent with per-window display).
+// Confidence = sum of per-window Platt for that label / total windows (including background).
+// Background windows contribute 0, naturally penalising species that win few windows.
 function majorityVote(preds) {
   const filtered = preds.filter(p => p.label !== 'Background');
   if (!filtered.length) return { label: 'No frog found', confidence: 0, all: [] };
@@ -227,16 +243,10 @@ function majorityVote(preds) {
     confSum[label] = (confSum[label] || 0) + confidence;
   }
 
+  const n      = preds.length; // denominator includes background windows
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  const winner = sorted[0][0];
-  const all    = sorted
-    .map(([label, count]) => ({
-      label,
-      confidence: confSum[label] / count, // average model confidence, not vote share
-    }))
-    .slice(0, 5);
-
-  return { label: winner, confidence: all[0].confidence, all };
+  const all    = sorted.map(([label]) => ({ label, confidence: confSum[label] / n })).slice(0, 5);
+  return { label: sorted[0][0], confidence: all[0].confidence, all };
 }
 
 // ---------------------------------------------------------------------------
@@ -298,9 +308,13 @@ class ClassifierService {
 
   cancelProcessing() { this._cancelled = true; }
 
-  processAudio = async (uri, setStatus, setProgress) => {
+  processAudio = async (uri, setStatus, setProgress, onWaveformReady) => {
     this._cancelled = false;
 
+    const filename = uri.split('/').pop();
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\./i.test(filename);
+    const displayName = isUuid ? `Recording ${new Date().toLocaleTimeString()}` : filename;
+    console.log(`[INPUT] ${displayName}`);
     setStatus('Reading file...');
     const base64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
     const bytes  = Buffer.from(base64, 'base64');
@@ -317,6 +331,20 @@ class ClassifierService {
     if (fileSr !== SR) setStatus(`Resampling ${fileSr} Hz → ${SR} Hz...`);
     console.log(`[AUDIO] sr=${fileSr} samples=${audioData.length}`);
 
+    // Build waveform thumbnail (80 RMS buckets for display)
+    const WAVE_POINTS = 80;
+    const bucketSize  = Math.floor(audioData.length / WAVE_POINTS);
+    const rawWave     = [];
+    for (let i = 0; i < WAVE_POINTS; i++) {
+      let sumSq = 0;
+      const off = i * bucketSize;
+      for (let j = off; j < off + bucketSize && j < audioData.length; j++) sumSq += audioData[j] * audioData[j];
+      rawWave.push(Math.sqrt(sumSq / bucketSize));
+    }
+    const wavePeak        = Math.max(...rawWave, 0.001);
+    const waveformSamples = rawWave.map(s => s / wavePeak);
+    onWaveformReady?.(waveformSamples); // expose before window loop so UI can shade during analysis
+
     setStatus('Classifying...');
     const totalWindows = Math.max(0, Math.floor((audioData.length - WIN_SAMPLES) / STRIDE_SAMPLES) + 1);
     setProgress(0);
@@ -331,7 +359,15 @@ class ClassifierService {
       if (this._cancelled) throw new Error('Classification cancelled');
 
       const window = audioData.slice(start, start + WIN_SAMPLES);
-      const pred = predict(extractFeatures(window));
+
+      // RMS pre-filter — skip feature extraction + SVM for silent windows
+      let sumSq = 0;
+      for (let k = 0; k < window.length; k++) sumSq += window[k] * window[k];
+      const rms = Math.sqrt(sumSq / window.length);
+
+      const pred = rms < RMS_SILENCE_THRESHOLD
+        ? { label: 'Background', confidence: 1 }
+        : predict(extractFeatures(window));
 
       windowPredictions.push(pred);
       windowStartTimes.push(start / SR);
@@ -346,6 +382,15 @@ class ClassifierService {
       const sorted    = Object.values(labelCounts).sort((a, b) => b - a);
       if (sorted.length >= 1 && sorted[0] - (sorted[1] ?? 0) > remaining) break;
 
+      // Ticker status every 5 windows
+      if (windowIdx % 5 === 0) {
+        const leading = Object.entries(labelCounts).sort(([, a], [, b]) => b - a)[0];
+        setStatus(leading
+          ? `${leading[0]} · ${windowIdx}/${totalWindows}`
+          : `Background · ${windowIdx}/${totalWindows}`
+        );
+      }
+
       // Yield every window so the native animation thread can render bar frames
       setProgress(windowIdx / totalWindows);
       await new Promise(r => setTimeout(r, 0));
@@ -359,7 +404,9 @@ class ClassifierService {
       windowPredictions.reduce((acc, p) => { acc[p.label] = (acc[p.label] || 0) + 1; return acc; }, {})
     ).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([l, c]) => `${l}:${c}`).join(', ');
     console.log(`[CLASSIFY] ${windowPredictions.length} windows | result: ${label} (${(confidence * 100).toFixed(0)}%) | votes: ${voteSummary}`);
+
     const winDuration = WIN_SAMPLES / SR;
+    const totalSec    = audioData.length / SR;
     const windows = windowPredictions.map((pred, i) => ({
       startSec:   windowStartTimes[i],
       endSec:     windowStartTimes[i] + winDuration,
@@ -367,7 +414,18 @@ class ClassifierService {
       confidence: pred.confidence,
     }));
 
-    return { label, confidence, all: all ?? [], windowCount: windowPredictions.length, windows };
+    // Map window predictions to waveform buckets for coloured display
+    const frogBuckets = new Array(WAVE_POINTS).fill(false);
+    const frogLabels  = new Array(WAVE_POINTS).fill(null);
+    windowPredictions.forEach((pred, idx) => {
+      if (pred.label !== 'Background') {
+        const bi = Math.min(WAVE_POINTS - 1, Math.floor(windowStartTimes[idx] / totalSec * WAVE_POINTS));
+        frogBuckets[bi] = true;
+        if (!frogLabels[bi]) frogLabels[bi] = pred.label;
+      }
+    });
+
+    return { label, confidence, all: all ?? [], windowCount: windowPredictions.length, windows, waveformSamples, frogBuckets, frogLabels, audioDuration: totalSec };
   };
 }
 

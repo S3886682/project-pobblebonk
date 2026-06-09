@@ -170,7 +170,7 @@ export const AboutScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#EEF4EE',
+    backgroundColor: 'transparent',
   },
   container: {
     flex: 1,

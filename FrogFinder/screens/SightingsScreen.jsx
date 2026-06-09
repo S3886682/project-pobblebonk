@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Share, Alert } from 'react-native';
 import { useSightings } from '../hooks/useSightings';
 import speciesData from '../assets/data/speciesDetails.json';
@@ -89,8 +89,12 @@ const SightingCard = ({ item, onDelete }) => {
   );
 };
 
-export const SightingsScreen = () => {
-  const { sightings, loading, deleteSighting } = useSightings();
+export const SightingsScreen = ({ isActive }) => {
+  const { sightings, loading, deleteSighting, fetchSightings } = useSightings();
+
+  useEffect(() => {
+    if (isActive) fetchSightings();
+  }, [isActive]);
 
   return (
     <View style={styles.screen}>
@@ -120,7 +124,7 @@ export const SightingsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: LIGHT_GREEN },
+  screen: { flex: 1, backgroundColor: 'transparent' },
   list:   { padding: 16, flexGrow: 1 },
 
   card: {

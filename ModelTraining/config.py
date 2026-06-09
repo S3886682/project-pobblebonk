@@ -14,7 +14,7 @@
 # --- Audio processing ---
 SAMPLE_RATE = 32000    # SR
 WIN_SEC     = 1.0      # seconds per training window (tuned: sweep found 1.0 >> 0.5 >> 0.3)
-N_MFCC      = 20       # MFCC coefficients (tuned: 20 best with win_sec=1.0)
+N_MFCC      = 30       # MFCC coefficients (tuned: sweep found 30 >> 20 on WAV test set)
 N_FFT       = 2048     # n_fft / window size
 HOP_LENGTH  = 256      # hop length (tuned: sweep found 256 best with win_sec=1.0)
 

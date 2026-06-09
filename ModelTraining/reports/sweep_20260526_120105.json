@@ -1,0 +1,489 @@
+{
+  "timestamp": "2026-05-26T12:01:05.235457",
+  "baseline": {
+    "sr": 32000,
+    "win_sec": 1.0,
+    "n_mfcc": 20,
+    "n_fft": 2048,
+    "hop_length": 256,
+    "aug_noise_lvl": 0.3
+  },
+  "runs": [
+    {
+      "label": "baseline",
+      "params": {},
+      "val_f1": 0.7895,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win_sec=0.3",
+      "params": {
+        "win_sec": 0.3
+      },
+      "val_f1": 0.7431,
+      "accuracy": 0.4167,
+      "correct": 15,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Eastern Dwarf Tree Frog",
+        "Smooth Toadlet",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Growling Grass Frog",
+        "Eastern Sign-bearing Froglet",
+        "Eastern Common Froglet",
+        "Sloanes Froglet",
+        "Southern Smooth Froglet",
+        "Striped Marsh Frog",
+        "Mallee Spadefoot Toad",
+        "Red-groined Froglet",
+        "Baw Baw Frog",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Tylers Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win_sec=0.7",
+      "params": {
+        "win_sec": 0.7
+      },
+      "val_f1": 0.7357,
+      "accuracy": 0.5833,
+      "correct": 21,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Peron's Tree Frog",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Eastern Sign-bearing Froglet",
+        "Southern Smooth Froglet",
+        "Southern Barred Frog",
+        "Mallee Spadefoot Toad",
+        "Common Spadefoot Toad",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win_sec=1.0",
+      "params": {
+        "win_sec": 1.0
+      },
+      "val_f1": 0.7895,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_mfcc=13",
+      "params": {
+        "n_mfcc": 13
+      },
+      "val_f1": 0.7801,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Spotted Marsh Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_mfcc=30",
+      "params": {
+        "n_mfcc": 30
+      },
+      "val_f1": 0.7709,
+      "accuracy": 0.7778,
+      "correct": 28,
+      "total": 36,
+      "failing": [
+        "Peron's Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Southern Barred Frog",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_mfcc=40",
+      "params": {
+        "n_mfcc": 40
+      },
+      "val_f1": 0.7692,
+      "accuracy": 0.7778,
+      "correct": 28,
+      "total": 36,
+      "failing": [
+        "Peron's Tree Frog",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Southern Barred Frog",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_fft=1024",
+      "params": {
+        "n_fft": 1024
+      },
+      "val_f1": 0.7482,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Southern Brown Tree Frog",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "n_fft=4096",
+      "params": {
+        "n_fft": 4096
+      },
+      "val_f1": 0.8322,
+      "accuracy": 0.6667,
+      "correct": 24,
+      "total": 36,
+      "failing": [
+        "Peron's Tree Frog",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Verreauxs Tree Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "hop=256",
+      "params": {
+        "hop_length": 256
+      },
+      "val_f1": 0.7895,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "hop=1024",
+      "params": {
+        "hop_length": 1024
+      },
+      "val_f1": 0.7898,
+      "accuracy": 0.6111,
+      "correct": 22,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Eastern Common Froglet",
+        "Eastern Banjo Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Blue Mountains Tree Frog",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "noise=0.0",
+      "params": {
+        "aug_noise_lvl": 0.0
+      },
+      "val_f1": 0.8069,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Red-groined Froglet",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "noise=0.1",
+      "params": {
+        "aug_noise_lvl": 0.1
+      },
+      "val_f1": 0.7851,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "noise=0.5",
+      "params": {
+        "aug_noise_lvl": 0.5
+      },
+      "val_f1": 0.777,
+      "accuracy": 0.7222,
+      "correct": 26,
+      "total": 36,
+      "failing": [
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win1.0+fft1024",
+      "params": {
+        "win_sec": 1.0,
+        "n_fft": 1024
+      },
+      "val_f1": 0.7482,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Southern Brown Tree Frog",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win1.0+mfcc30",
+      "params": {
+        "win_sec": 1.0,
+        "n_mfcc": 30
+      },
+      "val_f1": 0.7709,
+      "accuracy": 0.7778,
+      "correct": 28,
+      "total": 36,
+      "failing": [
+        "Peron's Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Southern Barred Frog",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win1.0+hop256",
+      "params": {
+        "win_sec": 1.0,
+        "hop_length": 256
+      },
+      "val_f1": 0.7895,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win1.0+mfcc30+fft1024",
+      "params": {
+        "win_sec": 1.0,
+        "n_mfcc": 30,
+        "n_fft": 1024
+      },
+      "val_f1": 0.7466,
+      "accuracy": 0.6389,
+      "correct": 23,
+      "total": 36,
+      "failing": [
+        "Southern Brown Tree Frog",
+        "Peron's Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Eastern Sign-bearing Froglet",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Tylers Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win1.0+fft1024+hop256",
+      "params": {
+        "win_sec": 1.0,
+        "n_fft": 1024,
+        "hop_length": 256
+      },
+      "val_f1": 0.7482,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Southern Brown Tree Frog",
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    },
+    {
+      "label": "win1.0+noise0.1",
+      "params": {
+        "win_sec": 1.0,
+        "aug_noise_lvl": 0.1
+      },
+      "val_f1": 0.7851,
+      "accuracy": 0.6944,
+      "correct": 25,
+      "total": 36,
+      "failing": [
+        "Littlejohns Tree Frog",
+        "Leaf Green Tree Frog",
+        "Victorian Frog",
+        "Striped Marsh Frog",
+        "Southern Barred Frog",
+        "Common Spadefoot Toad",
+        "Dendys Toadlet",
+        "Southern Toadlet",
+        "Martins Toadlet",
+        "Wrinkled Toadlet",
+        "Lesueurs Tree Frog"
+      ]
+    }
+  ]
+}

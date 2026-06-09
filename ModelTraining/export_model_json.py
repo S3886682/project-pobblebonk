@@ -56,6 +56,12 @@ def main():
     total_weights = sum(len(w) for _, w in mel_fb_sparse)
     print(f"  {N_MELS} filters, {total_weights} non-zero weights")
 
+    has_platt = hasattr(svc, 'probA_') and svc.probA_ is not None
+    if has_platt:
+        print(f"  Platt params:    probA_ {svc.probA_.shape}, probB_ {svc.probB_.shape}")
+    else:
+        print("  Warning: no Platt params (model trained without probability=True?)")
+
     model = {
         "kernel":          svc.kernel,
         "gamma":           float(svc._gamma),
@@ -67,6 +73,7 @@ def main():
         "scaler_mean":     scaler.mean_.tolist(),
         "scaler_scale":    scaler.scale_.tolist(),
         "mel_filterbank":  mel_fb_sparse,
+        **({"prob_a": svc.probA_.tolist(), "prob_b": svc.probB_.tolist()} if has_platt else {}),
     }
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)

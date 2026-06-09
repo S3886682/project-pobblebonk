@@ -3,27 +3,37 @@ import { classifierService } from '../services/classifierService';
 
 export const useClassifier = () => {
   const [classification, setClassification] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [loading, setLoading]               = useState(false);
+  const [error, setError]                   = useState(null);
+  const [progress, setProgress]             = useState(null);
+  const [status, setStatus]                 = useState(null);
+  const [waveformSamples, setWaveformSamples] = useState([]);
 
   const classify = useCallback(async (uri) => {
     try {
       setLoading(true);
       setError(null);
       setClassification(null);
+      setWaveformSamples([]);
 
-      const { label, confidence, all, windowCount, windows } = await classifierService.processAudio(uri, setStatus, setProgress);
+      const onWaveformReady = (samples) => setWaveformSamples(samples);
+
+      const {
+        label, confidence, all, windowCount, windows,
+        waveformSamples: finalSamples, frogBuckets, frogLabels, audioDuration,
+      } = await classifierService.processAudio(uri, setStatus, setProgress, onWaveformReady);
+
+      // Ensure final samples are set (onWaveformReady already called, but guard)
+      if (finalSamples?.length) setWaveformSamples(finalSamples);
 
       const result = {
-        topMatch: {
-          name: label,
-          confidence,
-        },
+        topMatch:     { name: label, confidence },
         alternatives: (all ?? []).slice(1).map(({ label: name, confidence: conf }) => ({ name, confidence: conf })),
         windowCount,
-        windows: windows ?? [],
+        windows:      windows ?? [],
+        frogBuckets:  frogBuckets ?? [],
+        frogLabels:   frogLabels  ?? [],
+        audioDuration: audioDuration ?? 0,
       };
 
       setClassification(result);
@@ -44,6 +54,7 @@ export const useClassifier = () => {
     setStatus(null);
     setProgress(null);
     setLoading(false);
+    setWaveformSamples([]);
   }, []);
 
   const cancel = useCallback(() => {
@@ -57,6 +68,7 @@ export const useClassifier = () => {
     error,
     progress,
     status,
+    waveformSamples,
     classify,
     reset,
     cancel,
