@@ -1,3 +1,13 @@
+/*
+ * Purpose: Core audio classification pipeline — reads a WAV file, decodes
+ *          16-bit PCM, resamples to 32 kHz, extracts MFCC and spectral-contrast
+ *          features per 1-second window, and runs an on-device SVM to identify
+ *          the Australian frog species present in the recording.
+ * Inputs:  processAudio(uri, setStatus, setProgress, onWaveformReady) where uri
+ *          is a local audio file path; the callbacks receive live UI updates.
+ * Outputs: { label, confidence, all, windowCount, windows, waveformSamples,
+ *            frogBuckets, frogLabels, audioDuration }
+ */
 import * as FileSystem from 'expo-file-system/legacy';
 import { Buffer } from 'buffer';
 import Meyda from 'meyda';

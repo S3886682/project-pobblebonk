@@ -1,3 +1,9 @@
+/*
+ * Purpose: Loads the full species catalogue from speciesDetails.json and
+ *          provides case-insensitive lookup by common name.
+ * Inputs:  getSpecies(name) — common name string; getAllSpecies() takes no args.
+ * Outputs: A single species detail object (or null), or the full species array.
+ */
 import speciesData from '../assets/data/speciesDetails.json';
 
 class SpeciesService {

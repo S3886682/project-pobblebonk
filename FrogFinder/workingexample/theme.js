@@ -1,3 +1,10 @@
+/*
+ * Purpose: Design tokens for the working example UI — colour palette (C) and
+ *          typography style presets (T) referencing Inter and Playfair Display fonts.
+ * Inputs:  None.
+ * Outputs: Exported C (colours) and T (typography) constants used by working
+ *          example screen components.
+ */
 export const C = {
   bg:         '#E5DDD0',   // warm parchment
   surface:    '#F2EDE2',   // lighter cream for cards & bottom bar

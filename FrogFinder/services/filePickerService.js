@@ -1,3 +1,10 @@
+/*
+ * Purpose: Opens the system file picker filtered to WAV audio files and returns
+ *          the selected file's local URI for classification.
+ * Inputs:  User file selection via the OS document picker.
+ * Outputs: Local file URI string, or null if the user cancels. Throws an Error
+ *          if the selected file is not a supported WAV format.
+ */
 import * as DocumentPicker from 'expo-document-picker';
 
 const SUPPORTED_MIME_TYPES = ['audio/wav', 'audio/wave', 'audio/x-wav'];

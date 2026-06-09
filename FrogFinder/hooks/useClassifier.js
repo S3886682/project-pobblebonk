@@ -1,3 +1,10 @@
+/*
+ * Purpose: React hook that manages frog classification state — invokes the
+ *          classifier service and exposes loading, progress, and result state.
+ * Inputs:  classify(uri) — local audio file URI to classify.
+ * Outputs: { classification, loading, error, progress, status,
+ *            waveformSamples, classify, reset, cancel }
+ */
 import { useState, useCallback } from 'react';
 import { classifierService } from '../services/classifierService';
 

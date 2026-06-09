@@ -1,3 +1,10 @@
+/*
+ * Purpose: Sightings history screen — displays a list of previously identified
+ *          frog sightings with confidence scores, location, alternatives, and
+ *          export/delete actions.
+ * Inputs:  isActive prop (boolean) — refreshes the list when the tab becomes active.
+ * Outputs: Rendered scrollable list of sighting cards; share sheet on export.
+ */
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Share, Alert } from 'react-native';
 import { useSightings } from '../hooks/useSightings';

@@ -1,3 +1,9 @@
+/*
+ * Purpose: Static map of species image filenames to their bundled MP3 sample
+ *          call recordings, used by AboutScreen to play reference calls.
+ * Inputs:  None.
+ * Outputs: Exported frogAudio object keyed by image filename (e.g. 'spotted_marsh_frog.png').
+ */
 // Keyed by the species image filename (without .png) — same key as frogImages.js.
 // Species without a sample recording are not listed; callers get undefined.
 export const frogAudio = {

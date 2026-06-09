@@ -1,3 +1,12 @@
+/*
+ * Purpose: Syncs local sightings (with optional audio/spectrogram files) to
+ *          Supabase cloud storage, with network-state checking, per-item
+ *          progress callbacks, and auto-sync on connection restore.
+ * Inputs:  uploadSighting(sighting) — a single sighting record; uploadAllSightings
+ *          (onProgress) — uploads all un-synced local records.
+ * Outputs: Upload result summary { success, totalCount, uploadedCount,
+ *          failedCount, errors }, or the inserted Supabase record for single upload.
+ */
 import * as Network from 'expo-network';
 import { getSightings, updateSighting } from './sightingService';
 import {

@@ -1,3 +1,9 @@
+/*
+ * Purpose: Design-system tokens — colour palette, spacing scale, typography
+ *          presets, border radii, and shadow definitions for the app.
+ * Inputs:  None.
+ * Outputs: Exported Theme constants object imported by screen and component files.
+ */
 export const Theme = {
   colors: {
     primary: '#007AFF',

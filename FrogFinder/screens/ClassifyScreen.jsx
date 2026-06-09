@@ -1,3 +1,11 @@
+/*
+ * Purpose: Main identification screen — records or uploads a WAV, runs the
+ *          on-device SVM classifier, displays the result with a waveform
+ *          visualisation, and auto-saves identified sightings.
+ * Inputs:  Audio via device microphone or WAV file picker.
+ * Outputs: Rendered screen; classification result shown in a modal; sighting
+ *          written to local storage via sightingsService.
+ */
 import { useState } from 'react';
 import {
   View, Text, TouchableOpacity, ActivityIndicator,

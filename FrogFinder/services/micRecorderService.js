@@ -1,3 +1,11 @@
+/*
+ * Purpose: Manages device microphone recording sessions — requests permissions,
+ *          configures platform-specific formats (16-bit WAV on iOS, M4A on
+ *          Android), and enforces a 30-second maximum duration.
+ * Inputs:  startRecording(onAutoStop) — callback fired if the recorder auto-stops.
+ *          stopRecording() — manually ends the session.
+ * Outputs: stopRecording() resolves to the local audio file URI.
+ */
 import { AudioModule, requestRecordingPermissionsAsync, setAudioModeAsync, IOSOutputFormat, AudioQuality } from 'expo-audio';
 import { Platform } from 'react-native';
 

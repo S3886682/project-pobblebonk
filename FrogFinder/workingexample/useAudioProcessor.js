@@ -1,3 +1,14 @@
+/*
+ * Purpose: Comprehensive React hook for the working example — orchestrates
+ *          microphone recording, WAV file upload, PCM decode, MFCC feature
+ *          extraction, SVM classification, animated progress, waveform
+ *          visualisation, and audio playback in a single API.
+ * Inputs:  selectedModel (string, optional) — model name key from MODELS in classifier.js.
+ * Outputs: Full state and action object: { prediction, status, progress,
+ *          audioDuration, isProcessing, isRecording, audioLevel, waveformSamples,
+ *          waveformFrogBuckets, waveformFrogLabels, isPlaying, progressAnim,
+ *          startRecording, stopRecording, uploadAudio, playAudio, cancel, seekAudio, ... }
+ */
 import { useState, useRef } from 'react';
 import { Animated, Easing, LayoutAnimation } from 'react-native';
 import { useAudioRecorder, AudioModule, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';

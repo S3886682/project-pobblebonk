@@ -1,3 +1,12 @@
+/*
+ * Purpose: JSON file-backed persistence layer for frog sightings — reads and
+ *          writes a sightings.json file in the app's document directory.
+ * Inputs:  getSightings() reads all records; addSighting({ species, confidence,
+ *          alternatives, date, location }) appends a new entry; deleteSighting(id)
+ *          removes by ID.
+ * Outputs: getSightings() returns an array sorted newest-first; addSighting()
+ *          returns the stored entry with its generated ID.
+ */
 import * as FileSystem from 'expo-file-system/legacy';
 
 const SIGHTINGS_PATH = `${FileSystem.documentDirectory}sightings.json`;

@@ -1,3 +1,10 @@
+/*
+ * Purpose: React hook that loads, adds, and deletes frog sightings from local
+ *          JSON storage, refreshing automatically on mount.
+ * Inputs:  None on mount (auto-fetches); addSighting(sighting) and deleteSighting(id)
+ *          accept sighting data or an ID.
+ * Outputs: { sightings, loading, error, fetchSightings, addSighting, deleteSighting }
+ */
 import { useState, useEffect, useCallback } from 'react';
 import { sightingsService } from '../services/sightingsService';
 

@@ -1,3 +1,9 @@
+/*
+ * Purpose: Root application component; renders the global header, tab bar, and
+ *          horizontal swipe navigation between the three main screens.
+ * Inputs:  None (app entry point).
+ * Outputs: Top-level React tree mounted by Expo.
+ */
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';

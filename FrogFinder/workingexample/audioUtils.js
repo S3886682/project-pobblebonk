@@ -1,3 +1,11 @@
+/*
+ * Purpose: Low-level audio utilities — WAV header parsing, 16-bit PCM decoding,
+ *          and linear-interpolation resampling for the working example pipeline.
+ * Inputs:  parseWav(bytes: Buffer) — raw file bytes.
+ *          decodePcm(bytes, dataOffset, numChannels) — after parseWav.
+ *          resample(mono: Float32Array, fileSr, targetSr) — decoded samples.
+ * Outputs: Decoded Float32Array of normalised audio samples [-1, 1].
+ */
 import { SR } from './constants';
 
 // ---------------------------------------------------------------------------

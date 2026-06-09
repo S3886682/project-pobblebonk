@@ -1,3 +1,9 @@
+/*
+ * Purpose: Decorative UI component that renders a flat cloud shape using
+ *          overlapping white rounded rectangles and circles.
+ * Inputs:  Props: width (number, default 100), opacity (number, default 0.88).
+ * Outputs: Rendered React Native View shaped like a cloud.
+ */
 import { View } from 'react-native';
 
 // Flat AC-style cloud made from overlapping white rounded circles.

@@ -1,3 +1,12 @@
+/*
+ * Purpose: SVM inference engine for the working example — loads the bundled model,
+ *          applies feature scaling, computes RBF kernel values, runs pairwise voting,
+ *          and converts Platt probabilities to a calibrated confidence score.
+ * Inputs:  predict(features: number[], modelName?) — flat feature vector from extractFeatures.
+ *          majorityVote(preds) — array of per-window predictions.
+ * Outputs: { label, confidence, all?, probs? } for a single window; majorityVote
+ *          returns { label, confidence, all } aggregated across all windows.
+ */
 // ---------------------------------------------------------------------------
 // Available models — add new entries here as new models are trained.
 // Each value must be a statically require()'d JSON file so Metro can bundle it.

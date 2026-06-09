@@ -1,3 +1,9 @@
+/*
+ * Purpose: Opens the local SQLite database and initialises the sightings schema
+ *          (table + indexes) on first run.
+ * Inputs:  None (database path is fixed to "frogfinder.db").
+ * Outputs: Default export db (SQLite connection); named export initializeDatabase().
+ */
 import * as SQLite from 'expo-sqlite';
 
 const DB_NAME = 'frogfinder.db';

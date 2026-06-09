@@ -1,3 +1,11 @@
+/*
+ * Purpose: Extracts a flat acoustic feature vector from a mono audio segment
+ *          using Meyda — combines MFCC (mean + std + delta + delta-delta),
+ *          spectral contrast, and spectral centroid statistics.
+ * Inputs:  extractFeatures(segment: Float32Array) — one windowed audio segment
+ *          at the model's sample rate.
+ * Outputs: Flat numeric array used directly as input to the SVM classifier.
+ */
 import Meyda from 'meyda';
 import { SR, N_MFCC, FFT_SIZE, HOP_SIZE } from './constants';
 

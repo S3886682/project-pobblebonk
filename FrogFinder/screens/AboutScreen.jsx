@@ -1,3 +1,9 @@
+/*
+ * Purpose: Searchable species reference screen — lists all frog species with
+ *          photos and sample calls, and shows a detail modal on tap.
+ * Inputs:  speciesDetails.json (species data), frogImages and frogAudio asset maps.
+ * Outputs: Rendered React Native screen component (no props required).
+ */
 import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView,

@@ -1,3 +1,9 @@
+/*
+ * Purpose: Static map of species image filenames to their bundled PNG photos,
+ *          used by AboutScreen and ClassifyScreen to display species images.
+ * Inputs:  None.
+ * Outputs: Exported frogImages object keyed by image filename (e.g. 'baw_baw_frog.png').
+ */
 export const frogImages = {
   'green_and_golden_bell_frog.png': require('./frog_images/green_and_golden_bell_frog.png'),
   'booroolong_frog.png': require('./frog_images/booroolong_frog.png'),

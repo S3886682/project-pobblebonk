@@ -1,3 +1,11 @@
+/*
+ * Purpose: Shared constants for the working example — audio processing parameters
+ *          (sample rate, window/stride sizes, FFT settings), Expo recording options,
+ *          team member info, and sample sightings data.
+ * Inputs:  None.
+ * Outputs: Exported constants imported by audioUtils, features, classifier,
+ *          and useAudioProcessor.
+ */
 export const SR            = 32000;
 export const WIN_SAMPLES   = Math.round(SR * 0.3);    // 9600
 export const STRIDE_SAMPLES = Math.round(SR * 0.2);   // 6400
