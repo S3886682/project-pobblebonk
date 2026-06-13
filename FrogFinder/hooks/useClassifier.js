@@ -1,34 +1,46 @@
+/*
+ * Purpose: React hook that manages frog classification state — invokes the
+ *          classifier service and exposes loading, progress, and result state.
+ * Inputs:  classify(uri) — local audio file URI to classify.
+ * Outputs: { classification, loading, error, progress, status,
+ *            waveformSamples, classify, reset, cancel }
+ */
 import { useState, useCallback } from 'react';
 import { classifierService } from '../services/classifierService';
 
 export const useClassifier = () => {
   const [classification, setClassification] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [loading, setLoading]               = useState(false);
+  const [error, setError]                   = useState(null);
+  const [progress, setProgress]             = useState(null);
+  const [status, setStatus]                 = useState(null);
+  const [waveformSamples, setWaveformSamples] = useState([]);
 
   const classify = useCallback(async (uri) => {
     try {
       setLoading(true);
       setError(null);
       setClassification(null);
+      setWaveformSamples([]);
 
-      const { label, confidence, windowCount } = await classifierService.processAudio(uri, setStatus, setProgress);
+      const onWaveformReady = (samples) => setWaveformSamples(samples);
+
+      const {
+        label, confidence, all, windowCount, windows,
+        waveformSamples: finalSamples, frogBuckets, frogLabels, audioDuration,
+      } = await classifierService.processAudio(uri, setStatus, setProgress, onWaveformReady);
+
+      // Ensure final samples are set (onWaveformReady already called, but guard)
+      if (finalSamples?.length) setWaveformSamples(finalSamples);
 
       const result = {
-        topMatch: {
-          name: label,
-          scientificName: '',
-          description: 'No description available',
-          habitat: 'Unknown',
-          size: 'Unknown',
-          callDescription: 'Unknown',
-          conservationStatus: 'Unknown',
-          confidence,
-        },
-        alternatives: [],
+        topMatch:     { name: label, confidence },
+        alternatives: (all ?? []).slice(1).map(({ label: name, confidence: conf }) => ({ name, confidence: conf })),
         windowCount,
+        windows:      windows ?? [],
+        frogBuckets:  frogBuckets ?? [],
+        frogLabels:   frogLabels  ?? [],
+        audioDuration: audioDuration ?? 0,
       };
 
       setClassification(result);
@@ -48,15 +60,24 @@ export const useClassifier = () => {
     setError(null);
     setStatus(null);
     setProgress(null);
+    setLoading(false);
+    setWaveformSamples([]);
   }, []);
 
+  const cancel = useCallback(() => {
+    classifierService.cancelProcessing();
+    reset();
+  }, [reset]);
+
   return {
-    classification,  // { label, confidence, windowCount }
+    classification,
     loading,
     error,
-    progress,        // 0–1 during classification, null otherwise
-    status,          // string status message, null otherwise
-    classify,        // (uri: string) => Promise<{ label, confidence, windowCount }>
+    progress,
+    status,
+    waveformSamples,
+    classify,
     reset,
+    cancel,
   };
 };

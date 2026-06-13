@@ -1,34 +1,48 @@
+/*
+ * Purpose: Manages device microphone recording sessions — requests permissions,
+ *          configures platform-specific formats (16-bit WAV on iOS, M4A on
+ *          Android), and enforces a 30-second maximum duration.
+ * Inputs:  startRecording(onAutoStop) — callback fired if the recorder auto-stops.
+ *          stopRecording() — manually ends the session.
+ * Outputs: stopRecording() resolves to the local audio file URI.
+ */
 import { AudioModule, requestRecordingPermissionsAsync, setAudioModeAsync, IOSOutputFormat, AudioQuality } from 'expo-audio';
 import { Platform } from 'react-native';
 
 const MAX_RECORDING_DURATION_MS = 30000; // 30 seconds
 
-// M4A is platform agnostic and SHOULD work on iOS, Android, and web. I only have access to iOS so this will need to be tested.
-const COMMON_OPTIONS = {
-  extension: '.m4a',
-  sampleRate: 44100,
-  numberOfChannels: 1,
-  bitRate: 128000,
-  isMeteringEnabled: false,
-};
-
+// iOS records as 16-bit PCM WAV at 32 kHz (matches the classifier's expected sample rate).
+// Android's MediaRecorder has no WAV output — it records AAC/M4A. The classify screen
+// will show a clear error when an Android user tries to classify a mic recording.
 const PLATFORM_OPTIONS = Platform.select({
   ios: {
-    ...COMMON_OPTIONS,
-    outputFormat: IOSOutputFormat.MPEG4AAC,
+    extension: '.wav',
+    sampleRate: 32000,
+    numberOfChannels: 1,
+    bitRate: 512000,
+    isMeteringEnabled: false,
+    outputFormat: IOSOutputFormat.LINEARPCM,
     audioQuality: AudioQuality.HIGH,
-    linearPCMBitDepth: 16,    // required by iOS audio session even for AAC
+    linearPCMBitDepth: 16,
     linearPCMIsBigEndian: false,
     linearPCMIsFloat: false,
   },
   android: {
-    ...COMMON_OPTIONS,
+    extension: '.m4a',
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 128000,
+    isMeteringEnabled: false,
     outputFormat: 'mpeg4',
     audioEncoder: 'aac',
   },
   default: {
-    ...COMMON_OPTIONS,
-    mimeType: 'audio/webm',
+    extension: '.wav',
+    sampleRate: 32000,
+    numberOfChannels: 1,
+    bitRate: 512000,
+    isMeteringEnabled: false,
+    mimeType: 'audio/wav',
   },
 });
 

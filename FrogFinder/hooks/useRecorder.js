@@ -1,4 +1,11 @@
+/*
+ * Purpose: React hook that wraps microphone recording and file-picker selection,
+ *          exposing a simple start/stop/upload API to screens.
+ * Inputs:  User actions (startRecording, stopRecording, uploadFromFile).
+ * Outputs: { isRecording, recordingError, startRecording, stopRecording, uploadFromFile }
+ */
 import { useState, useCallback } from 'react';
+import { Platform } from 'react-native';
 import { micRecorderService } from '../services/micRecorderService';
 import { filePickerService } from '../services/filePickerService';
 
@@ -26,7 +33,12 @@ export const useRecorder = () => {
       setRecordingError(null);
       const uri = await micRecorderService.stopRecording();
       setIsRecording(false);
-      return { uri, fileName: 'recording.m4a', mimeType: 'audio/m4a' };   // wrap uri
+      const isAndroid = Platform.OS === 'android';
+      return {
+        uri,
+        fileName: isAndroid ? 'recording.m4a' : 'recording.wav',
+        mimeType: isAndroid ? 'audio/m4a' : 'audio/wav',
+      };
     } catch (error) {
       console.error('[useRecorder] stopRecording failed:', error);
       setRecordingError(error.message);

@@ -39,7 +39,7 @@ TESTING_DIR = os.path.join("datasets", "updated", "Testing Audio")
 REPORTS_DIR = "reports"
 
 # ── Baseline ───────────────────────────────────────────────────────────────────
-BASELINE = dict(sr=32000, win_sec=0.5, n_mfcc=20, n_fft=2048, hop_length=512, aug_noise_lvl=0.3)
+BASELINE = dict(sr=32000, win_sec=1.0, n_mfcc=20, n_fft=2048, hop_length=256, aug_noise_lvl=0.3)
 
 # ── Individual parameter variations ───────────────────────────────────────────
 SINGLES = [

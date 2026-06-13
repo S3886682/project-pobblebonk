@@ -1,19 +1,58 @@
-import * as FileSystem from 'expo-file-system';
+/*
+ * Purpose: JSON file-backed persistence layer for frog sightings — reads and
+ *          writes a sightings.json file in the app's document directory.
+ * Inputs:  getSightings() reads all records; addSighting({ species, confidence,
+ *          alternatives, date, location }) appends a new entry; deleteSighting(id)
+ *          removes by ID.
+ * Outputs: getSightings() returns an array sorted newest-first; addSighting()
+ *          returns the stored entry with its generated ID.
+ */
+import * as FileSystem from 'expo-file-system/legacy';
 
-const SIGHTINGS_FILE = `${FileSystem.documentDirectory}/data/sightings.json`;
+const SIGHTINGS_PATH = `${FileSystem.documentDirectory}sightings.json`;
 
-class SightingsService {
-  async getSightings() {
-    // To implement: Read sightings from file sightings.json
-  }
-
-  async addSighting(sighting) {
-    // To implement: Add sighting to file sightings.json
-  }
-
-  async clearAllSightings() {
-    // To implement: Clear all sightings from file sightings.json
+async function readAll() {
+  try {
+    const info = await FileSystem.getInfoAsync(SIGHTINGS_PATH);
+    if (!info.exists) return [];
+    const raw = await FileSystem.readAsStringAsync(SIGHTINGS_PATH);
+    return JSON.parse(raw);
+  } catch {
+    return [];
   }
 }
 
-export const sightingsService = new SightingsService();
+async function writeAll(sightings) {
+  await FileSystem.writeAsStringAsync(SIGHTINGS_PATH, JSON.stringify(sightings));
+}
+
+export const sightingsService = {
+  async getSightings() {
+    const all = await readAll();
+    return all.sort((a, b) => new Date(b.date) - new Date(a.date));
+  },
+
+  async addSighting(sighting) {
+    const all = await readAll();
+    const entry = {
+      id:           Date.now().toString(),
+      species:      sighting.species,
+      confidence:   sighting.confidence,
+      alternatives: sighting.alternatives ?? [],
+      date:         sighting.date ?? new Date().toISOString(),
+      location:     sighting.location ?? null,
+    };
+    all.push(entry);
+    await writeAll(all);
+    return entry;
+  },
+
+  async deleteSighting(id) {
+    const all = await readAll();
+    await writeAll(all.filter(s => s.id !== id));
+  },
+
+  async clearAll() {
+    await writeAll([]);
+  },
+};

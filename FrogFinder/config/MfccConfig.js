@@ -1,3 +1,9 @@
+/*
+ * Purpose: Audio processing parameters for MFCC feature extraction — sample
+ *          rate, window/hop sizes, mel bands, frequency range, and DCT settings.
+ * Inputs:  None.
+ * Outputs: Exported MfccConfig constants object used by feature extraction code.
+ */
 export const MfccConfig = {
   // Audio processing parameters
   sampleRate: 44100,

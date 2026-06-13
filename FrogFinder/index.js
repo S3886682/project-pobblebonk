@@ -1,3 +1,9 @@
+/*
+ * Purpose: Expo entry point; registers the root App component so it works in
+ *          both Expo Go and native builds.
+ * Inputs:  None.
+ * Outputs: None (side-effect: registers the component with the native host).
+ */
 import { registerRootComponent } from 'expo';
 
 import App from './App';

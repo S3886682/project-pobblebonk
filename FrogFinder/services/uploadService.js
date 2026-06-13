@@ -1,11 +1,19 @@
-import * as FileSystem from 'expo-file-system';
+/*
+ * Purpose: Syncs local sightings (with optional audio/spectrogram files) to
+ *          Supabase cloud storage, with network-state checking, per-item
+ *          progress callbacks, and auto-sync on connection restore.
+ * Inputs:  uploadSighting(sighting) — a single sighting record; uploadAllSightings
+ *          (onProgress) — uploads all un-synced local records.
+ * Outputs: Upload result summary { success, totalCount, uploadedCount,
+ *          failedCount, errors }, or the inserted Supabase record for single upload.
+ */
 import * as Network from 'expo-network';
 import { getSightings, updateSighting } from './sightingService';
 import {
     insertSupabaseSighting,
     uploadAudioToSupabase,
     uploadSpectrogramToSupabase,
-} from './supabase';
+} from '../config/supabase';
 
 // Check if device has internet connection
 export const isConnected = async () => {
@@ -196,7 +204,7 @@ export const syncSightings = async (onProgress = null) => {
 export const getSyncStatus = async () => {
     try {
         const connected = await isConnected();
-        const localSightings = await getAllSightings();
+        const localSightings = await getSightings();
 
         const unsyncedSightings = localSightings.filter((s) => !s.cloud_id);
 

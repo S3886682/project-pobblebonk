@@ -1,3 +1,9 @@
+/*
+ * Purpose: Central application configuration — metadata, Supabase credentials,
+ *          audio recording settings, classifier thresholds, and feature flags.
+ * Inputs:  REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY environment variables.
+ * Outputs: Exported AppConfig object consumed by other modules.
+ */
 export const AppConfig = {
   // App metadata
   name: 'FrogFinder',

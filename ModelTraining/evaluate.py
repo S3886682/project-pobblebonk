@@ -38,19 +38,18 @@ def predict_file(pipeline, path):
     y, _ = librosa.load(path, sr=SAMPLE_RATE, mono=True)
     if len(y) < WIN_SAMPLES:
         y = np.pad(y, (0, WIN_SAMPLES - len(y)))
-    preds, confs = [], []
+    class_probs = {c: [] for c in pipeline.classes_}
     for start in range(0, len(y) - WIN_SAMPLES + 1, STEP_SAMPLES):
         feat  = extract_features(y[start:start + WIN_SAMPLES]).reshape(1, -1)
         proba = pipeline.predict_proba(feat)[0]
-        label = pipeline.classes_[proba.argmax()]
-        if label != "Background":
-            preds.append(label)
-            confs.append(float(proba.max()))
-    if not preds:
+        for cls, p in zip(pipeline.classes_, proba):
+            class_probs[cls].append(float(p))
+    avg_probs = {c: float(np.mean(ps)) for c, ps in class_probs.items()
+                 if ps and c != "Background"}
+    if not avg_probs:
         return "Unknown", 0.0
-    final    = max(set(preds), key=preds.count)
-    avg_conf = float(np.mean([c for p, c in zip(preds, confs) if p == final]))
-    return final, avg_conf
+    ranked = sorted(avg_probs, key=avg_probs.get, reverse=True)
+    return ranked[0], avg_probs[ranked[0]]
 
 
 def main():

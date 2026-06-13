@@ -1,4 +1,11 @@
-import db from './database';
+/*
+ * Purpose: Low-level SQLite CRUD helpers for the sightings table — get, filter,
+ *          add, update, delete, and clear sighting records.
+ * Inputs:  Sighting data objects (species_name, confidence, lat/lng, etc.) or
+ *          record IDs for delete/update operations.
+ * Outputs: Query result arrays, last inserted row ID, or void on mutation.
+ */
+import db from '../config/database';
 
 // Get all sightings
 export const getSightings = async () => {
